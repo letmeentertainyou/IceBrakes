@@ -89,13 +89,32 @@ already a docs directory containing the following things.
     * TESTING_README.txt (a writeup of the testing methodology and tools)
 
 
+*** Why does IceBrakes exist? ***
+
+I fully realize that the last thing your project needs is another linter. IceBrakes uses pylint, 
+mypy and pytest in the 0.0.1 version so I am aware how many tools exist, and how little desire I 
+have to add more tools (and config files) to my project.
+
+Why am I writing IceBrakes then? This is my first public project, and I am using it as a chance for me 
+to practice documenting and testing a project. Improving my skills as a developer and communicator are 
+the primary goals of the IceBrakes project.
+
+IceBrakes also exists as a proof of concept because I am genuinely annoyed by the lack of constant variables
+in Python. I really like the way typescript adds that functionality to javascript but I'm not a fan of
+needing to compile from one scripting language to another. That is why IceBrakes simply uses comments
+in regular valid python files. 
+
+I personally would love to see a "const" keyword added to python but I don't really know how much work
+it would be to add something like that to the language so IceBrakes is my stopgap compromise.
+
+
 *** Who is the dev? ***
 
 IceBrakes is developed by me, Lars. I'm a linux nerd and Python enthusiast. I'm also a 
 musician and in general I like patterns and abstract concepts. 
 
 Permissions are granted to anyone who wishes to use or edit this code in accordance 
-with the GPLv3 Copyleft license provided. So you too can be the developer if you'd like. 
+with the GPLv3 Copyleft license provided. So you too can be the developer if you'd like.
 
 
 *** What's in a name? ***
