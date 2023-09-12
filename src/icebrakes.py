@@ -13,22 +13,22 @@ ALL_MODE=False
 
 def icebrakes(filepath: str) -> None:
     '''takes a single argument filepath is a string that points to
-    a file, then icebrakes begins linting the file by collecting all 
+    a file, then IceBrakes begins linting the file by collecting all 
     named assignments and any references to const variables (#$) '''
 
-    # Using the global keyward disables like three other pylint warnings.
+    # Using the global keyword disables like three other pylint warnings.
     global ALL_MODE # pylint: disable=global-statement
     if isfile(filepath):
         with open(filepath, 'r', encoding='utf-8') as filehandler:
             file: List[str] = filehandler.readlines()
 
-        consts: DictIntStr = get_names_from_file(file, '#$')
+        constants: DictIntStr = get_names_from_file(file, '#$')
 
-        if not consts:
-            print('No consts declared, use #$ at then end of a line with a declartion.')
+        if not constants:
+            print('No constants declared, use #$ at then end of a line with a declartion.')
         ALL_MODE=True
         all_vars: DictIntStr = get_names_from_file(file)
-        cross_reference(consts, all_vars)
+        cross_reference(constants, all_vars)
     else:
         print(f'{filepath} is not a file. No linting possible.')
 
@@ -59,7 +59,7 @@ def get_names_from_file(file: List[str], target: str='') -> dict:
     return names
 
 
-# These parse metods for the basis on the whole project and
+# These parse methods for the basis on the whole project and
 # are subject to the most new code being written
 
 
@@ -106,11 +106,11 @@ def equal_sign_parse(line: str) -> str:
     return name
 
 
-def cross_reference(consts: DictIntStr, all_vars: DictIntStr) -> None:
-    '''Once you have the consts and all_vars for a given python file you 
-    can cross reference them to see if any consts are overwritten illegally 
+def cross_reference(constants: DictIntStr, all_vars: DictIntStr) -> None:
+    '''Once you have the constants and all_vars for a given python file you 
+    can cross reference them to see if any constants are overwritten illegally 
     and inform the users.'''
-    for c_key, c_val in consts.items():
+    for c_key, c_val in constants.items():
         for v_key, v_val in all_vars.items():
             mes=f'Bad #$ use: {c_val} was made static on line {c_key}, and mutated on line {v_key}'
             if c_val == v_val and v_key != c_key:

@@ -1,5 +1,5 @@
 #!/bin/python3
-'''These are the custom built testing tools. Having them in a seperate file
+'''These are the custom built testing tools. Having them in a separate file
 allows for the actual tests files to have very little repeated code. See 
 TESTING_README.txt for much more info about tools.py .
 

@@ -10,9 +10,9 @@
 ################### TESTING ######################
 
 Going from 0.0.1 onward features will be defined in a test before development. 
-See DOCS/test_maninfest.txt for a detailed list of the tests and what they check.
+See DOCS/test_manifest.txt for a detailed list of the tests and what they check.
 
-All tests need to be backwards and forewards compatable so I am not writing tests
+All tests need to be backwards and forwards compatible so I am not writing tests
 to prove that features don't exist. If for example I wrote a test to prove that 
 scopes aren't implemented, then I would need to delete that test when scopes are added.
 
@@ -23,9 +23,9 @@ There are two main python files in src/tests
     tools.py (the testing api)
  
 
-*** bellow is the fulltext of template.py for reference
+*** bellow is the full text of template.py for reference
 
-BEGINE TEMPLATE
+BEGIN TEMPLATE
 '''The test_###.py file is also the file we are linting.'''
 from src.tests.tools import static_checker
 
@@ -75,11 +75,11 @@ the name of the failed test.
 While you can just copy and paste the testing template as you'd like, I did automate that.
 tools.py contains helpers for running tests, generating test data, and generating tests themselves.
 
-This module contains all the tools used by the testing methodoloy, I'll break it downside
+This module contains all the tools used by the testing methodology, I'll break it downside
 by function below.
 
 pytest is my testing tool of choice so you will need to pip install it into
-your python3 enviroment to do any testing.
+your python3 environment to do any testing.
 
 Below is a list of functions provided in tools.py.
 
@@ -92,7 +92,7 @@ Below is a list of functions provided in tools.py.
     for the given test number.
     
     ./tools.py -a
-    -a to genererate data for all tests
+    -a to generate data for all tests
 
     ./tools.py -n ###
     -n to copy the template to a new test file numbered after the second arg.
@@ -102,7 +102,7 @@ Below is a list of functions provided in tools.py.
     Also there is a sed command that replaces "test_number" in the template with the real number of the test being created.
 
 *** cleanup() -> None
-    Deletes the tempory .txt files created during the tests.
+    Deletes the temporary .txt files created during the tests.
     This leaves the .gitignore file which is important for
     git to recognize empty dirs which I've decided I want
 

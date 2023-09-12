@@ -1,8 +1,9 @@
 docs/
     CONTRIBUTING.txt
+    IceBrakes API.txt
     manifest.txt
     README.txt
-    testing_manifest.txt
+    test_manifest.txt
     TESTING_README.txt
     TODO.txt
 

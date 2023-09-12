@@ -18,7 +18,7 @@ IceBreaks is an attempt to provide typescript style const variables to python. T
 what if a linter could tell you when you break immutability?
 
 It's true that python has things like tuples and frozen data classes which cannot 
-be modifed; the value of any variable in python can be freely assigned. Consider the 
+be modified; the value of any variable in python can be freely assigned. Consider the 
 following python code.
 
     x = (1, 2, 3)   # this is a tuple
@@ -45,10 +45,10 @@ to lose track of the value. Here is another example using dataclasses.
     foo = False  # VALID PYTHON
 
 Even though our dataclass was frozen, we still lost the data by simply overwriting 
-what the name 'foo' references. My propososal is for some kind of syntax to let 
+what the name 'foo' references. My proposal is for some kind of syntax to let 
 the language know you cannot reassign to a given name.
 
-For simplicty that syntax is implemented as a comment at the end of a line. 
+For simplicity that syntax is implemented as a comment at the end of a line. 
 Hashmark dollarsign (#$) as the last two characters of the line tells IceBrakes to 
 jump into action. Here's an example use and the expected output, with line numbers for clarity.
 
@@ -78,7 +78,7 @@ already a docs directory containing the following things.
     
     * CONTRIBUTING.txt (How to help document and write code for IceBrakes)
 
-    * manfest.txt (list of all files in the root dir)
+    * manifest.txt (list of all files in the root dir)
     
     * README.txt (this document)
     
@@ -115,7 +115,7 @@ writing documentation and a testing methodology. I will be developing features
 after 0.0.1 launches on github.
 
 Therefore one of the easiest ways to contribute will be to write unit tests for
-any missings features so that as I develop the features I can turn the tests on.
+any missing features so that as I develop the features I can turn the tests on.
 
 If you make a pull request with actual code changes, I will require that you also
 include a passing test file (or multiple) formatted according to the project.

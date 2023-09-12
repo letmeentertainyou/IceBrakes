@@ -6,7 +6,7 @@ Now I like reading code as much as the next person but having to read the code t
 out a project's intended API is in fact a bad API. 
 
 So if you want to contribute to IceBrakes I ask that you consider documenting your code 
-carefully. IceBrakes' documentation needs to be succint, kind, caring, human and succint. 
+carefully. IceBrakes' documentation needs to be succinct, kind, caring, human and succinct. 
 
 Do make more technical info available but don't shove it down the reader's throat. Tell 
 them what they need to know to get started with the features you are documenting. 
@@ -19,7 +19,7 @@ writing documentation and a testing methodology. I will be developing features
 after 0.0.1 launches on github.
 
 Therefore one of the easiest ways to contribute will be to write unit tests for
-any missings features so that as I develop the features I can turn the tests on.
+any missing features so that as I develop the features I can turn the tests on.
 
 If you make a pull request with actual code changes, I will require that you also
 include a passing test file (or multiple) formatted according to docs/TESTING_README.

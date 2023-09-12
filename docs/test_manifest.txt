@@ -24,10 +24,10 @@ Define an immutable function inside while loop.
 You can't assign a shallow copy of an immutable var
 because in python that can mutate the original. This will be huge mutability safety net.
 # 008 ***
-On that note you also shouldn't be allowed to change the indivual values in an immutable list
+On that note you also shouldn't be allowed to change the individual values in an immutable list
 or dict. Of course in python only tuples have that behavior but we are adding it in manually.
 # 009 ***
-The async recursive assignment test. A couple sins are comitted here.
+The async recursive assignment test. A couple sins are committed here.
 # 010 ***
 Classes baby! This test checks for changes to immutable class vars in class methods, and
 properties.

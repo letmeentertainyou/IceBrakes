@@ -19,7 +19,7 @@ BAR = 'fleventyfour'
 ##################################################
 
 def test() -> None:
-    '''This is the default test implementation, call a test with the number of your test.'''
+    '''This is the default test implementation.'''
     pytest_runner('11')
 
 

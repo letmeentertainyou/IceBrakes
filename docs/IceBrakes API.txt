@@ -6,7 +6,7 @@ a DOCS pull request.
 GLOBALS
 
 *** DictIntStr = Dict[int, str]
-    DictIntStr is a type aliases because the type hint Dict[int, str] occurs a lot in icebrakes
+    DictIntStr is a type aliases because the type hint Dict[int, str] occurs a lot in IceBrakes
     while it unlikely for that type to change it is better to be able to change it once at the top
     of the file.
 
@@ -17,13 +17,13 @@ GLOBALS
 FUNCTIONS
 
 *** icebrakes(filepath: str) -> None
-    The main function of icebrakes takes a single argument filepath is a string that points to
+    The main function of IceBrakes takes a single argument filepath is a string that points to
     a file, assuming filepath is a file, then this function begins linting the file by collecting all named assignments and any references to const variables (#$). Then it runs cross_reference on them which is detailed further down this file.
 
 
 *** get_names_from_file(file: List[str], target='') -> dict
 
-    This function checks every line of a file and grabs the anything idenfitifed as a name
+    This function checks every line of a file and grabs the anything identified as a name
     from those lines. If a target is declared this function checks the last chars of the line
     for the target.
 
@@ -62,6 +62,6 @@ FUNCTIONS
     x=45, x =45, x= 45 ...etc.
 
 
-*** cross_referencecross_reference(consts, all_vars) -> None
+*** cross_reference(constants, all_vars) -> None
 
-    Once you have the consts and all_vars for a given python file you can cross reference them to see if any consts are overwritten illegally and inform the users. This is the main interface our users will interact with.
+    Once you have the constants and all_vars for a given python file you can cross reference them to see if any constants are overwritten illegally and inform the users. This is the main interface our users will interact with.
