@@ -1,0 +1,70 @@
+docs/
+    CONTRIBUTING.txt
+    manifest.txt
+    README.txt
+    testing_manifest.txt
+    TESTING_README.txt
+    TODO.txt
+
+
+src/
+    main.py
+
+
+src/tests/
+    tools.py
+    template.py
+    data/perm
+    data/tmp
+
+
+src/tests/tests/*
+    all the unit tests.
+
+
+*** config files in the root dir ***
+
+NOTE: A few of these config settings come from a personal project with more modules, 
+and so the path corrections may be overkill for the current state of this project 
+but they will help if I add modules.
+
+
+# .coveragerc
+This file tells pytest --cov which python files I am not testing. This includes __init__.py, 
+the tests themselves, lines like 'if __name__ == "__main__":', and 'def main()' as in my coding 
+style these things usually do not need to be on the coverage report.
+
+
+# .pylintrc
+Python paths are weird and even when other tools work fine pylint likes to throw this error E0401 
+and I don't like getting imperfect lint scores so I just remove that error. It has no berring on 
+whether the code actually resolves my imports correctly.
+
+
+# mypy.ini
+A whole bunch of settings to make mypy way more hardcore. Read the file for more hints.
+Add a rule to ignore test_*.py files here.
+
+
+# pyproject.toml
+Seriously more python path fixes one is for pytest (also needed is my path corrections 
+in src/__init__.py) and another path fix is for mypy's stubgen. Currently this project doesn't 
+have any stubs so this is kind of irrelevant but again it will be nice to have if I add 
+a need for stubs.
+
+
+# pyrightconfig.json
+This file tells vscode which dirs I don't want linting in. It's mostly for all the cache 
+files python likes to generate. This is an attempt to speed up vscode startups. 
+
+
+# unifier.sh 
+This is an internal tool I use to run pylint/mypy/pytest at once.
+
+
+# STUBS
+This project doesn't have any custom types yet but I will add stubs as soon 
+as they are needed.
+
+
+Copyright © 2023 Lars S.

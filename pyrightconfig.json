@@ -1,0 +1,15 @@
+{
+    "include": [
+        "src",
+        "src/tests",
+      ],
+
+    "exclude": [
+    ".mypy_cache",
+    ".pytest_cache",
+    "src/__pycache__",
+    "src/tests/__pycache__",
+    "src/tests/data",
+    "stubs",
+  ]
+}

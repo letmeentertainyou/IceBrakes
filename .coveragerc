@@ -1,0 +1,11 @@
+[report]
+include = */src/*
+omit = *test_*, *__init__*, *data*
+exclude_lines =
+    if __name__ == .__main__.:
+    if TYPE_CHECKING:
+    # def main
+    # Add any function defs or other lines to be ignored by testing above
+
+show_missing = true
+skip_empty = true

@@ -1,0 +1,32 @@
+# TO DO
+DOC STRINGS     *DONE*
+PYLINT          *DONE*
+MYPY            *DONE*
+DOCS DIR        *DONE*
+MANIFEST        *DONE*
+WRITE TESTS     *DONE*
+TEST MANIFEST   *DONE*
+TESTING_README  *DONE*
+SETUPTOOLS      *DONE*
+NAME PROJECT    *DONE*
+REWRITE README  *DONE*
+RESET GIT       *DONE*
+SPELLCHECK      *DONE*
+
+todo:
+CREATE GITHUB ACCOUNT
+CREATE ICEBRAKES PROJECT PAGE
+SETUP GIT AND GITHUB TO TALK TO EACHOTHER
+PUSH PROJECT TO GITHUB
+
+# MISSING FEATURES
+Implement tests #4-10 and #12.
+Loop awareness
+Scope awareness
+Lines that end in '\' awareness
+Multi value assignments (tuple expansion)
+
+And other white space anomalies.
+
+        
+Copyright © 2023 Lars S.

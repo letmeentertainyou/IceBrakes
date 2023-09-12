@@ -1,0 +1,67 @@
+This document contains all the functions and their apis from icebreaks.py,
+if you can think of a question this doc does not answer then please submit 
+a DOCS pull request.
+
+
+GLOBALS
+
+*** DictIntStr = Dict[int, str]
+    DictIntStr is a type aliases because the type hint Dict[int, str] occurs a lot in icebrakes
+    while it unlikely for that type to change it is better to be able to change it once at the top
+    of the file.
+
+*** ALL_MODE=False
+    This arg was getting passed through like four functions and it made more sense for it to be global.
+
+
+FUNCTIONS
+
+*** icebrakes(filepath: str) -> None
+    The main function of icebrakes takes a single argument filepath is a string that points to
+    a file, assuming filepath is a file, then this function begins linting the file by collecting all named assignments and any references to const variables (#$). Then it runs cross_reference on them which is detailed further down this file.
+
+
+*** get_names_from_file(file: List[str], target='') -> dict
+
+    This function checks every line of a file and grabs the anything idenfitifed as a name
+    from those lines. If a target is declared this function checks the last chars of the line
+    for the target.
+
+    This can probably be optimized but the logic isn't really going to change. If I add full dir 
+    support then this method will be called on every py file in a dir. Error handling would be good too.
+
+    get_names_from_file also houses a subfunction called get_names_from_line which is run on every
+    line of the file.
+
+    (support for single line multi name assignments coming soon)
+
+
+*** paren_parse(line: str) -> str
+
+    paren_parse searches a line for one of these openers ['async def', 'def', 'class'] 
+    and if an opener is found then the string between the opener and "(" is returned.
+
+    This captures var names on lines like: 
+    def name():
+    class name():
+    async def name():
+
+
+*** equal_sign_parse equal_sign_parse(line: str) -> str
+
+    This method parses a string for any single equal sign.
+    Once an equal sign is found it gets the first name before the 
+    equal sign. 
+    
+    I also added support for other kinds of assignment like +=, *=, :=. 
+
+    I made ALL_MODE global so it isn't passed around so much. 
+
+    There types of assignment are currently supported.
+    x: DictIntStr = {45, '45'}
+    x=45, x =45, x= 45 ...etc.
+
+
+*** cross_referencecross_reference(consts, all_vars) -> None
+
+    Once you have the consts and all_vars for a given python file you can cross reference them to see if any consts are overwritten illegally and inform the users. This is the main interface our users will interact with.

@@ -1,0 +1,44 @@
+TESTS DOCUMENTED BY NUMBER
+
+Instead of writing a bunch of tests for the existing features, instead write tests
+for features that will be written, then turn the tests on when the feature exists.
+(Also write tests for existing features too!)
+
+*** means the test is written but the feature is not written.
+
+***** means neither the test nor the feature are written. This is like fantasy football for tests.
+
+# 001
+Changing an immutable variable inside if __name__ == __main__ block
+# 002
+Mutating a variable on a line earlier than the line it's declared immutable on.
+# 003
+No linting is declared in this test.
+# 004 ***
+#$ is used at the end of a line but not vars are declared on that line.
+# 005 ***
+Declaring an immutable var inside a loop. This should be illegal.
+# 006 ***
+Define an immutable function inside while loop. 
+# 007 ***
+You can't assign a shallow copy of an immutable var
+because in python that can mutate the original. This will be huge mutability safety net.
+# 008 ***
+On that note you also shouldn't be allowed to change the indivual values in an immutable list
+or dict. Of course in python only tuples have that behavior but we are adding it in manually.
+# 009 ***
+The async recursive assignment test. A couple sins are comitted here.
+# 010 ***
+Classes baby! This test checks for changes to immutable class vars in class methods, and
+properties.
+# 011
+Added support for +=, -=, //= etc operators.
+# 012 ***
+Still need support for := operator because it is usually prefaced by something line 'if'.
+# 013 *****
+What happens if main.py is given a non python file? Either the wrong file extension or non ascii text.
+# 999
+Cleans up the src/tests/data/tmp dir.
+
+
+Copyright © 2023 Lars S.

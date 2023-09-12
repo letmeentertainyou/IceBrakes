@@ -1,0 +1,40 @@
+# Python3.6 requires setup.py or setup.cfg
+# So the project has been up to pyhton3.8 to be more modern.
+
+[build-system]
+requires = ["setuptools"]
+build-backend = "setuptools.build_meta"
+
+
+[project]
+name = "IceBrakes"
+version = "0.0.1"
+#dependencies = []
+
+
+[tool.setuptools.packages.find]
+# All the following settings are optional:
+where = ["."]
+include = ["src"]  # ["*"] by default
+exclude = ["src.tests*"]  # empty by default
+namespaces = false  # true by default
+
+# This single period and the path manips in src/__init__.py
+# Help pytest find modules.
+[tool.pytest.ini_options]
+pythonpath = [
+  "."
+]
+
+
+
+
+# DISABLED BECAUSE STUBS AREN'T USED YET
+#[tool.mypy]
+# Maybe this can be moved to mypy.ini
+#mypy_path = "stubs/src"
+
+# Use this command: stubgen src -o stubs
+# To auto generate in the stubs/src dir
+# You can do this after refactoring to save a lot of manual labor
+
