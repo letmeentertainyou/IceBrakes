@@ -20,17 +20,23 @@ GLOBALS
     while it unlikely for that type to change it is better to be able to change it once at the top
     of the file.
 
-*** ALL_MODE=False
-    This arg was getting passed through like four functions and it made more sense for it to be global.
 
-*** ERRORS=False
-    Used to track whether the lint failed or passed. And helps with the error codes too.
+CLASSES 
+
+*** States():
+
+    States.all_mode determines if we are linting for all names in a file or just those on lines ending in #?.
+
+    States.errors is used to track whether the lint failed or passed. And helps with the error codes too.
+
 
 FUNCTIONS
 
 *** icebrakes(filepath: str) -> None
     The main function of IceBrakes takes a single argument filepath is a string that points to
-    a file, assuming filepath is a file, then this function begins linting the file by collecting all named assignments and any references to const variables (#$). Then it runs cross_reference on them which is detailed further down this file.
+    a file, assuming filepath is a file, then this function begins linting the file by collecting 
+    all named assignments and any references to const variables (#$). Then it runs cross_reference 
+    on them which is detailed further down this file.
 
 
 *** get_names_from_file(file: List[str], target='') -> dict

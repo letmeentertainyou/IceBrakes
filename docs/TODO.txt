@@ -1,5 +1,6 @@
 # MISSING FEATURES
-Implement tests #4-10 and #12.
+
+Implement tests #3-10 and #12.
 Loop awareness
 Scope awareness
 Lines that end in '\' awareness
@@ -10,5 +11,10 @@ Add a changelog somewhere (maybe here?)
 Modify icebrakes algo to ignore names that aren't in the constants
 dict. This will skip a large amount of checks, and when more tests
 are run things will be way faster. Easy change.
-     
+
+
+# CHANGELOG
+Added exit codes 0, 1, 2
+Added States dataclass to remove globals from icebrakes.py
+
 Copyright © 2023 Lars S.

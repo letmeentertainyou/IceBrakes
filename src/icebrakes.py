@@ -5,48 +5,46 @@ Support for dirs will be added in the future.
 Minimum supported python version is 3.8.x (subject to change'''
 from os.path import isfile
 import sys
-#from sys import sys.argv, sys.exit
 from typing import Dict, List
+from dataclasses import dataclass
 
+# It's still really really really ugly to pass this everywhere
+# But at least I'm not using any globals anymore
+@dataclass
+class States():
+    '''I had to many global states vars so now this dataclass keeps them all tidy.'''
+    all_mode: bool = False
+    errors: bool = False
 
 DictIntStr = Dict[int, str]
-
-# Now that I have two globals it's worth making a data class that I can
-# Pass around so pylint can chill about globals being evil. Still hate
-# Have to pass all that data everywhere though.
-ALL_MODE: bool = False
-ERRORS: bool = False
 
 
 def icebrakes(filepath: str) -> None:
     '''takes a single argument filepath is a string that points to
     a file, then IceBrakes begins linting the file by collecting all 
     named assignments and any references to const variables (#$) '''
-
-    # Using the global keyword disables like three other pylint warnings.
-    global ALL_MODE # pylint: disable=global-statement
+    states = States()
 
     if isfile(filepath):
         with open(filepath, 'r', encoding='utf-8') as filehandler:
             file: List[str] = filehandler.readlines()
 
-        constants: DictIntStr = get_names_from_file(file, '#$')
+        constants: DictIntStr = get_names_from_file(file, states=states, target='#$')
 
-        if not constants and not ERRORS:      # When ERRORS is True then #$ must be somewhere
+        if not constants and not states.errors:      # When errors is True then #$ must be somewhere
             print('No constants declared, use #$ at then end of a line with a declaration.')
             sys.exit(2)
-        ALL_MODE=True
-        all_vars: DictIntStr = get_names_from_file(file)
-        cross_reference(constants, all_vars)
+        states.all_mode=True
+        all_vars: DictIntStr = get_names_from_file(file, states=states)
+        cross_reference(constants, all_vars, states=states)
     else:
         print(f'{filepath} is not a file. No linting possible.')
 
 
-def get_names_from_file(file: List[str], target: str='') -> dict:
+def get_names_from_file(file: List[str], states: States, target: str='') -> dict:
     '''This function checks every line of a file and grabs the names
     from those lines. If a target is declared this function checks
     the last chars of the file for the target.'''
-    global ERRORS # pylint: disable=global-statement
 
     def get_name_from_line(line: str) -> str:
         '''This function takes a line of a file and runs all the name parse funcs
@@ -56,7 +54,7 @@ def get_names_from_file(file: List[str], target: str='') -> dict:
         name: str = paren_parse(line)
         if name:
             return name
-        return equal_sign_parse(line)
+        return equal_sign_parse(line, states=states)
 
 
     names: DictIntStr = {}
@@ -68,7 +66,7 @@ def get_names_from_file(file: List[str], target: str='') -> dict:
                 names[index +1] = name
             elif target:
                 print(f'Immutable var declared on line number {index + 1}, but no names found.')
-                ERRORS=True
+                states.errors=True
     return names
 
 
@@ -90,7 +88,7 @@ def paren_parse(line: str) -> str:
     return name
 
 
-def equal_sign_parse(line: str) -> str:
+def equal_sign_parse(line: str, states: States) -> str:
     '''This method parses a string for any single equal sign.
     Once an equal sign is found it gets the first name before the 
     equal sign. See DOCS/icebrakes.txt for more info.'''
@@ -103,7 +101,7 @@ def equal_sign_parse(line: str) -> str:
             name += char
         return name
 
-    if ALL_MODE:
+    if states.all_mode:
         for symbol in ['-=', '+=', '*=', '%=', ':=', '/=', '//=']:
             if symbol in line:
                 idx = line.index(symbol)
@@ -119,24 +117,23 @@ def equal_sign_parse(line: str) -> str:
     return name
 
 
-def cross_reference(constants: DictIntStr, all_vars: DictIntStr) -> None:
+def cross_reference(constants: DictIntStr, all_vars: DictIntStr, states: States) -> None:
     '''Once you have the constants and all_vars for a given python file you 
     can cross reference them to see if any constants are overwritten illegally 
     and inform the users.'''
-    global ERRORS # pylint: disable=global-statement
 
     for c_key, c_val in constants.items():
         for v_key, v_val in all_vars.items():
             if c_val == v_val and v_key != c_key:
                 mes=f'Bad use {c_val} was made static on line {c_key}, and mutated on line {v_key}'
                 print(mes)
-                ERRORS = True
+                states.errors = True
 
-    if not ERRORS:
+    if not states.errors:
         print('Congrats you passed the IceBrakes lint with a perfect 300/300 score!')
 
     # This could be a return statement if we won't want to sys.exit on every call
-    sys.exit(int(ERRORS))     # I was gonna use two bools but this is damn clever.
+    sys.exit(int(states.errors))     # I was gonna use two bools but this is damn clever.
 
 
 if __name__ == '__main__':
