@@ -6,8 +6,12 @@ EXIT CODES
 0: Lint passed
 1: Lint failed.
 2: No immutables declared.
+
+It turned out to be pretty complicated adding exit code three because
+some lines might trigger EC3 and some might trigger EC1. So now any failures
+result in EC1 and EC2 is still used for when a lint isn't run at all.
 3: Immutable declared on a line but not defined.
-4: More than one failure?
+
 
 GLOBALS
 
@@ -19,6 +23,8 @@ GLOBALS
 *** ALL_MODE=False
     This arg was getting passed through like four functions and it made more sense for it to be global.
 
+*** ERRORS=False
+    Used to track whether the lint failed or passed. And helps with the error codes too.
 
 FUNCTIONS
 
