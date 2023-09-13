@@ -1,0 +1,1 @@
+Bad use FOO was made static on line 13, and mutated on line 10

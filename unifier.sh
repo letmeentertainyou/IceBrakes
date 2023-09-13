@@ -24,7 +24,8 @@ pl_code=$?
 
 # Init hook this script, and only commit if exit code is 0
 codes=( $pt_code $pl_code $mp_code )
-echo exit codes ${codes[@]}
+echo '#################################################'
+echo ./unifier.sh exit codes ${codes[@]}
 
 
 # Loop through the exit codes and exit 1 if any test fails.

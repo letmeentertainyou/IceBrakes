@@ -127,14 +127,21 @@ Below is a list of functions provided in tools.py.
     I may find a better method as testing develops further.
 
 
-*** pytest_runner(num: str) -> None
+*** pytest_runner(num: str, get_code: bool=False) -> int
     This function runs a IceBrakes.py lint on the given input file,
     and sends the given output to a tmp file. A test should never be written
     with an invalid input file because the test_###.py files are 
     the test input themselves. 
     
-    However I should add some code in IceBrakes.py to validate that a given input file is a valid python file. And then I should write tests for an invalid input use case.
+    However I should add some code in IceBrakes.py to validate that a given input file is a 
+    valid python file. And then I should write tests for an invalid input use case.
     
+    When you call pytest_runner with get_code=True, then pytest_runner returns the exit code
+    of icebrakes.py. This is useful for testing the exit codes in test_1001.
+
+    pytest_runner now returns 9999 by default, this is to please pylint which wants all paths
+    to either explicitly return something or have no returns at all.
+
 
 *** gen_output_for_all_test_0()-> None
     This function gets called when you run 

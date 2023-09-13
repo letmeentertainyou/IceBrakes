@@ -1,0 +1,2 @@
+Bad use BAR was made static on line 7, and mutated on line 12
+Bad use CAR was made static on line 8, and mutated on line 13

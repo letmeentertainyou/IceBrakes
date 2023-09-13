@@ -1,0 +1,5 @@
+Bad use BAR was made static on line 10, and mutated on line 11
+Bad use BAR was made static on line 10, and mutated on line 12
+Bad use BAR was made static on line 10, and mutated on line 13
+Bad use BAR was made static on line 10, and mutated on line 15
+Bad use BAR was made static on line 10, and mutated on line 16

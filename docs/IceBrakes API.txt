@@ -2,6 +2,12 @@ This document contains all the functions and their apis from icebreaks.py,
 if you can think of a question this doc does not answer then please submit 
 a DOCS pull request.
 
+EXIT CODES
+0: Lint passed
+1: Lint failed.
+2: No immutables declared.
+3: Immutable declared on a line but not defined.
+4: More than one failure?
 
 GLOBALS
 

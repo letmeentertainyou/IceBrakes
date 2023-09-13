@@ -12,10 +12,11 @@ from pathlib import PosixPath
 from sys import argv
 from time import strftime
 from typing import List
+from subprocess import run
 
 import pytest  # pylint: disable=unused-import
 
-TESTS: PosixPath = PosixPath(__file__).joinpath('../').resolve()
+TESTS: PosixPath = PosixPath(__file__).joinpath('../tests/').resolve()
 DATA: PosixPath = PosixPath(__file__).joinpath('../data').resolve()
 MAIN: PosixPath = PosixPath(TESTS).joinpath('../../icebrakes.py').resolve()
 
@@ -33,17 +34,17 @@ def parse_argv(args: List[str]) -> None:
             gen_output_for_all_test_0()
         else:
             _test_file = int_to_filepath(args[1])
-            system(f'{MAIN} {TESTS}/tests/{_test_file} > {DATA}/perm/{_test_file[:-3]}.txt')
+            system(f'{MAIN} {TESTS}/{_test_file} > {DATA}/perm/{_test_file[:-3]}.txt')
             print(f'Created new sample output for {_test_file} .')
 
     if tot == 3:
         if mode == '-n':         # Make a new test based on the template.
             num = args[2]
             test_name = int_to_filepath(num)
-            _test_file = f'{TESTS}/tests/_{test_name}'
-            test_file = f'{TESTS}/tests/{test_name}'
+            _test_file = f'{TESTS}/_{test_name}'
+            test_file = f'{TESTS}/{test_name}'
             if not isfile(_test_file) and not isfile(test_file):
-                system(f'cp {TESTS}/template.py {_test_file}')
+                system(f'cp ../{TESTS}/template.py {_test_file}')
                 system(f"sed -i 's/test_number/{num}/g' {_test_file}")
                 print(f'Created {test_name} from template.py')
 
@@ -76,18 +77,30 @@ def int_to_filepath(num: str) -> str:
     return test_file
 
 
-def pytest_runner(num: str) -> None:
+def pytest_runner(num: str, get_code: bool=False) -> int:
     '''This function runs a icebrakes.py lint on the given input file,
     and sends the given output to a tmp file. A test should never be written
     with an invalid input file because the test_###.py files are 
     the test input themselves.'''
     test_file = int_to_filepath(str(num))
     filename: str = test_file[:-3]    # the -3 removes ".py" from the filename
-    system(f'{MAIN} {TESTS}/tests/{test_file} > {DATA}/tmp/{filename}.txt')
+
+    # This branches because the dump to file gives exit code 0.
+    # Also we don't need to write files for the exit_code test anyways.
+    if get_code:
+        # Apparently subprocess.run is the easiest way to get an exit code.
+        proc = run([ MAIN, f'{TESTS}/{test_file}' ], check=False)
+        return proc.returncode
+
+    # subprocess.run is not able to handle this command
+    # with either an array or string input. I don't feel
+    # like spending a bunch more time debugging subprocess.run so os.system stays.
+    system(f'{MAIN} {TESTS}/{test_file} > {DATA}/tmp/{filename}.txt')
     assert isfile(f'{DATA}/perm/{filename}.txt')
     assert isfile(f'{DATA}/tmp/{filename}.txt')
-    #assert filecmp(f'{DATA}/perm/{filename}.txt', f'{DATA}/tmp/{filename}.txt')
+    assert filecmp(f'{DATA}/perm/{filename}.txt', f'{DATA}/tmp/{filename}.txt')
 
+    return 9999     # This number won't conflict with the existing exit codes.
 
 def gen_output_for_all_test_0()-> None:
     '''Output data will be generated for every test with a number
@@ -99,9 +112,9 @@ def gen_output_for_all_test_0()-> None:
     system(f'cp -r {DATA}/perm/ {backup_dir}')
     system(f'rm -r {DATA}/perm/ && mkdir {DATA}/perm')
 
-    for file in listdir(f'{TESTS}/tests'):
+    for file in listdir(TESTS):
         if file[0:6] == 'test_0' and '_999.py' not in file:
-            system(f'{MAIN} {TESTS}/tests/{file} > {DATA}/perm/{file[:-3]}.txt')
+            system(f'{MAIN} {TESTS}/{file} > {DATA}/perm/{file[:-3]}.txt')
     print('Created new sample outputs for every test and backups put in relegated.')
 
 

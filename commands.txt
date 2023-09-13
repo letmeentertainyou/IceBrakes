@@ -1,15 +1,22 @@
 # This file exists to document commands that have helped in this project.
 # This file is not intended to be executed which is why command lines start with $
 
+# To make a build of this project use 
+$ python -m build
+
+
+#### GIT ####
 
 # List all files in git repo
-$ git ls-tree --full-tree --name-only -r HEAD
+$ alias gt='git ls-tree --full-tree --name-only -r HEAD'
 
+# Undo last commit
+$ alias greset='git reset --soft HEAD~1'
+
+# add/commit
+$ alias gtree='git add --all && git commit -m $1'
 
 # This allows me to run my unifier script in project root from any sub dir.
 # The path would have to change to wherever you store the IceBrakes source code.
 $ alias uni='cd ~/Python/Projects/IceBrakes/ && ./unifier.sh && cd -'
 
-
-# To make a build of this project use 
-$ python -m build

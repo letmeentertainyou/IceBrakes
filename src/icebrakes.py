@@ -4,7 +4,8 @@ Support for dirs will be added in the future.
 
 Minimum supported python version is 3.8.x (subject to change'''
 from os.path import isfile
-from sys import argv
+import sys
+#from sys import sys.argv, sys.exit
 from typing import Dict, List
 
 
@@ -25,7 +26,8 @@ def icebrakes(filepath: str) -> None:
         constants: DictIntStr = get_names_from_file(file, '#$')
 
         if not constants:
-            print('No constants declared, use #$ at then end of a line with a declartion.')
+            print('No constants declared, use #$ at then end of a line with a declaration.')
+            sys.exit(2)
         ALL_MODE=True
         all_vars: DictIntStr = get_names_from_file(file)
         cross_reference(constants, all_vars)
@@ -110,16 +112,24 @@ def cross_reference(constants: DictIntStr, all_vars: DictIntStr) -> None:
     '''Once you have the constants and all_vars for a given python file you 
     can cross reference them to see if any constants are overwritten illegally 
     and inform the users.'''
+    errors = False
     for c_key, c_val in constants.items():
         for v_key, v_val in all_vars.items():
-            mes=f'Bad #$ use: {c_val} was made static on line {c_key}, and mutated on line {v_key}'
             if c_val == v_val and v_key != c_key:
+                mes=f'Bad use {c_val} was made static on line {c_key}, and mutated on line {v_key}'
                 print(mes)
+                errors = True
+
+    if not errors:
+        print('Congrats you passed the IceBrakes lint with a perfect 300/300 score!')
+
+    # This could be a return statement if we won't want to sys.exit on every call
+    sys.exit(int(errors))     # I was gonna use two bools but this is damn clever.
 
 
 if __name__ == '__main__':
-    if len(argv) == 2:
-        icebrakes(argv[1])
+    if len(sys.argv) == 2:
+        icebrakes(sys.argv[1])
     else:
         print('This project takes exactly 1 command line arg, a python file path.')
 
