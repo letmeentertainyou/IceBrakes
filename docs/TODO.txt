@@ -7,14 +7,50 @@ Lines that end in '\' awareness
 Multi value assignments (tuple expansion)
 And other white space anomalies.
 
+
+
+
+ALGORITHM IMPROVEMENT IDEAS!
+
+These changes will not effect any of the API and therefore any of the tests.
+So I will use pytest with our 10 existing tests to time out how much
+these improvements speed up testing.
+
+This speedup in the tests will help as I add more and more tests because right now
+it takes about 0m0.800s to run the 10 tests I have. I'd like to keep that number low as possible.
+
+
+
+*** 
+Modify IceBrakes algo to only read each file once. You still build two
+dicts for CONSTANTS and ALL_VARS but you do it in one pass.
+
+This will be uglier code in some ways with a bit more nesting and a bit less
+DRY potential. 
+
+Our bigO time improvement looks like this:  O(Nᴹ + Nᴹ⁺¹)  ->  O(Nᴹ⁺¹)
+Where N is the length of the file and M is the amount of checks I do per line
+and the +1 represents the single extra check for #$ at the end of each line.
+
+I'm having real trouble parsing this math because it casts a pretty wide net.
+For smaller numbers we are looking at close to 100% speed up or double speed. Hopefully
+that works out for my tests but as the size of N and M grow this improvement matters less.
+
+
+*** 
 Modify IceBrakes algo to ignore names that aren't in the constants
 dict. This will skip a large amount of checks, and when more tests
-are run things will be way faster. Easy change.
+are run things will be way faster. Easy change. I have no idea how this would
+effect big O time other than that the bigger the constants dict is the less
+skips I get. But overall this should other a huge speedup for the tests which only
+usually declare one or two #$ anyways. 
+
 
 
 # CHANGELOG
 Enabled tests 0000, 0004, 1001
 Added exit codes 0, 1, 2
 Added States dataclass to remove globals from icebrakes.py
+Added whitespace.py as the first step in the scopes problem.
 
 Copyright © 2023 Lars S.
