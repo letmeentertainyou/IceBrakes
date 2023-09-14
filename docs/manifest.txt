@@ -1,3 +1,8 @@
+NOTE: Many of the files that appear in root are sym links to the appropriate location
+for that file. Such as docs or src/scripts. This keeps things semi clean while allowing
+for import files to be in the root dir. I also made a copy of test_manifest in the 
+src/tests dir because it's easier to read it that way while writing tests.
+
 docs/
     CONTRIBUTING.txt
     IceBrakes API.txt
@@ -9,6 +14,9 @@ docs/
 
 
 src/
+    scripts/
+        pre-commit
+        unifier.sh
     main.py
 
 
