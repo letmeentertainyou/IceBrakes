@@ -4,48 +4,84 @@ Instead of writing a bunch of tests for the existing features, instead write tes
 for features that will be written, then turn the tests on when the feature exists.
 (Also write tests for existing features too!)
 
-*** means the test is written but the feature is not written.
+*   the test is written but the feature is not written.
 
-***** means neither the test nor the feature are written. This is like fantasy football for tests.
+**  neither the test nor the feature are written. This is like fantasy football for tests.
 
-# 0000
+*** the test file is being used to develop a complex feature and the final test will be more elaborate.
+
+
+0000
 This test passes the lint, and gives exit code 0.
-# 0001
+0001
 Changing an immutable variable inside if __name__ == __main__ block
-# 0002
+0002
 Mutating a variable on a line earlier than the line it's declared immutable on.
-# 0003
+0003
 No linting is declared in this test. Exit code 2
-# 0004 ***
+0004
 #$ is used at the end of a line but not vars are declared on that line. Exit code 3.
-# 0005 ***
+0005 *
 Declaring an immutable var inside a loop. This should be illegal.
-# 0006 ***
+0006 *
 Define an immutable function inside while loop. 
-# 0007 ***
+0007 *
 You can't assign a shallow copy of an immutable var because in python that 
 can mutate the original. This will be a huge mutability safety net.
-# 0008 ***
+0008 *
 On that note you also shouldn't be allowed to change the individual values in an immutable list
 or dict. Of course in python only tuples have that behavior but we are adding it in manually.
-# 0009 ***
+0009 *
 The async recursive assignment test. A couple sins are committed here.
-# 0010 ***
+0010 *
 Classes baby! This test checks for changes to immutable class vars in class methods, and
 properties.
-# 0011
+0011
 Added support for +=, -=, //= etc operators.
-# 0012 ***
+0012 *
 Still need support for := operator because it is usually prefaced by something like 'if'.
 
-
-# 1000 *****
+ 
+1000 **
 What happens if main.py is given a non python file? Either the wrong file extension or non ascii text.
-# 1001 * (needs exit code 3)
+
+Start with file extensions, and then see if there is a python way to test if a file is ascii or not.
+
+1001
 Use pytest_runner and existing test files to capture and test the expected exit codes.
 
+1002 ***
 
-# 9999_cleanup
+### THIS IS WRITTEN ###
+First learn tools/methods to identify the whitespace format of a python file (how many spaces/tabs)
+because assuming 4 could cause real issues. 
+
+
+Take all strings in a file (or some sample)
+Determine only lines that start with whitespace but also have non space chars
+(len(line.lstrip() > 0))  # To find non space chars in a line
+
+Then we take all those spaces and do math to find a common denominator
+2 4 6 8
+1 2 3 4
+3 6 9 12
+t t t t
+tt tt tt tt
+etc.
+The denominator is what I want.
+
+
+### NOT WRITTEN YET ###
+Once I can do that, then I need to write an engine for jumping
+forwards and backwards by the indent level. Then I need to start parsing for keywords that cause indentation.
+(Get a whole list of those bad boys.)
+
+Then we can tackle the goal of teaching IceBrakes to comprehend scopes and then turn on the missing tests.
+
+Then some much more elaborate white space tests need to be written to validate that scopes are correct.
+
+
+9999_cleanup
 Cleans up the src/tests/data/tmp dir.
 
 

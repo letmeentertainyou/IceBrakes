@@ -6,14 +6,14 @@ Scope awareness
 Lines that end in '\' awareness
 Multi value assignments (tuple expansion)
 And other white space anomalies.
-Add a changelog somewhere (maybe here?)
 
-Modify icebrakes algo to ignore names that aren't in the constants
+Modify IceBrakes algo to ignore names that aren't in the constants
 dict. This will skip a large amount of checks, and when more tests
 are run things will be way faster. Easy change.
 
 
 # CHANGELOG
+Enabled tests 0000, 0004, 1001
 Added exit codes 0, 1, 2
 Added States dataclass to remove globals from icebrakes.py
 
