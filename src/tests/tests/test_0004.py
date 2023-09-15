@@ -1,6 +1,5 @@
 '''Test what happens when #$ is declared on a line but no
-vars are assigned on that line, it should give a unique warning
-that code is not yet written so this test is impossible currently. '''
+vars are assigned on that line. This gives a unique output message.'''
 from src.tests.tools import pytest_runner
 
 ##################################################

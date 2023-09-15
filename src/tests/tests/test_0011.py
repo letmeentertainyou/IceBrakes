@@ -1,7 +1,11 @@
 '''This test insures that +=, and *=, etc are ignored by
 #$ checks but are still checked against for reassignment.
 The line BAR*= 0 will be ignored because you cannot mutate
-a variable and declare it immutable in one go. That's bad usage baby!'''
+a variable and declare it immutable in one go. That's bad usage baby!
+
+This test changed after the algo got updated. Previously it was not even
+possible for the linter to detect a #$ on a line with -= or *= etc. Now
+you get a whole lot more linting errors when that happens.'''
 from src.tests.tools import pytest_runner
 
 ##################################################

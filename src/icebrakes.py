@@ -3,17 +3,15 @@
 Support for dirs will be added in the future. 
 
 Minimum supported python version is 3.8.x (subject to change'''
+
 from os.path import isfile
 import sys
-from typing import Dict, List
+from typing import Dict, List, Tuple
 from dataclasses import dataclass
 
-# It's still really really really ugly to pass this everywhere
-# But at least I'm not using any globals anymore
 @dataclass
 class States():
     '''I had to many global states vars so now this dataclass keeps them all tidy.'''
-    all_mode: bool = False
     errors: bool = False
 
 DictIntStr = Dict[int, str]
@@ -23,28 +21,33 @@ def icebrakes(filepath: str) -> None:
     '''takes a single argument filepath is a string that points to
     a file, then IceBrakes begins linting the file by collecting all 
     named assignments and any references to const variables (#$) '''
+
+    # I tried to get rid of states now that it's a single value but it
+    # Either needs to be an object, a global or returned from every function
+    # In order for the state to change. So the dataclass stays for now. Yay OO.
     states = States()
 
     if isfile(filepath):
         with open(filepath, 'r', encoding='utf-8') as filehandler:
             file: List[str] = filehandler.readlines()
 
-        constants: DictIntStr = get_names_from_file(file, states=states, target='#$')
+        constants, all_vars = get_names_from_file(file, states=states)
 
-        if not constants and not states.errors:      # When errors is True then #$ must be somewhere
+        # This speed up has been removed in favor of never scraping the file twice.
+        # But we still need the custom exit code.
+
+        # I tried to to remove that states.errors check and broke everything.
+        if not constants and not states.errors:
             print('No constants declared, use #$ at then end of a line with a declaration.')
             sys.exit(2)
-        states.all_mode=True
-        all_vars: DictIntStr = get_names_from_file(file, states=states)
+
         cross_reference(constants, all_vars, states=states)
     else:
-        print(f'{filepath} is not a file. No linting possible.')
+        print(f'{filepath.rsplit("/")[-1]} is not a file. No linting possible.')
 
 
-def get_names_from_file(file: List[str], states: States, target: str='') -> dict:
-    '''This function checks every line of a file and grabs the names
-    from those lines. If a target is declared this function checks
-    the last chars of the file for the target.'''
+def get_names_from_file(file: List[str], states: States) -> Tuple[dict, dict]:
+    '''This function checks every line of a file and grabs names from those lines.'''
 
     def get_name_from_line(line: str) -> str:
         '''This function takes a line of a file and runs all the name parse funcs
@@ -54,21 +57,30 @@ def get_names_from_file(file: List[str], states: States, target: str='') -> dict
         name: str = paren_parse(line)
         if name:
             return name
-        return equal_sign_parse(line, states=states)
+        return equal_sign_parse(line)
 
 
-    names: DictIntStr = {}
+    all_vars: DictIntStr = {}
+    constants: DictIntStr = {}
     for index, line in enumerate(file):
-        #This is neat because the default value of target always returns True on 'in' checks.
-        if target in line.rstrip()[-len(target):]:
-            name: str = get_name_from_line(line)
-            if name:
-                names[index +1] = name
-            elif target:
-                print(f'Immutable var declared on line number {index + 1}, but no names found.')
-                states.errors=True
-    return names
+        # I could do this with one less if statement but the boolean helps
+        # Raise the edge case at the bottom of the function and I like that.
+        target: bool = False
 
+        if '#$' in line.rstrip()[-2:]:
+            target = True
+
+        name: str = get_name_from_line(line)
+
+        if name:
+            all_vars[index +1] = name
+            if target:
+                constants[index +1] = name
+
+        elif target:
+            print(f'Immutable var declared on line number {index + 1}, but no names found.')
+            states.errors=True
+    return constants, all_vars
 
 # These parse methods for the basis on the whole project and
 # are subject to the most new code being written
@@ -88,7 +100,7 @@ def paren_parse(line: str) -> str:
     return name
 
 
-def equal_sign_parse(line: str, states: States) -> str:
+def equal_sign_parse(line: str) -> str:
     '''This method parses a string for any single equal sign.
     Once an equal sign is found it gets the first name before the 
     equal sign. See DOCS/icebrakes.txt for more info.'''
@@ -101,11 +113,10 @@ def equal_sign_parse(line: str, states: States) -> str:
             name += char
         return name
 
-    if states.all_mode:
-        for symbol in ['-=', '+=', '*=', '%=', ':=', '/=', '//=']:
-            if symbol in line:
-                idx = line.index(symbol)
-                break
+    for symbol in ['-=', '+=', '*=', '%=', ':=', '/=', '//=']:
+        if symbol in line:
+            idx = line.index(symbol)
+            break
 
     if not idx:
         if '=' in line:

@@ -10,7 +10,6 @@ for features that will be written, then turn the tests on when the feature exist
 
 *** the test file is being used to develop a complex feature and the final test will be more elaborate.
 
-
 0000
 This test passes the lint, and gives exit code 0.
 0001
@@ -79,6 +78,12 @@ forwards and backwards by the indent level. Then I need to start parsing for key
 Then we can tackle the goal of teaching IceBrakes to comprehend scopes and then turn on the missing tests.
 
 Then some much more elaborate white space tests need to be written to validate that scopes are correct.
+
+
+1003
+This is the same as test 0 but with an invalid filename. To test the invalid file name case. 
+This test is a bit weird because it requires an invalid name so it actually tries to lint 
+test_0###.py which doesn't exist. 
 
 
 9999_cleanup

@@ -7,6 +7,11 @@
     tests for the testing tools and neither of these will use the template methodology
     laid out. 
 
+    There was an oversight when I wrote the part of tools.py that regenerates test data
+    and that code would delete the test data that doesn't start with 0. Which we don't want
+    to do. Fixed that bug.
+
+
 ################### TESTING ######################
 
 Going from 0.0.1 onward features will be defined in a test before development. 

@@ -1,4 +1,5 @@
-'''This test has no #$ symbols and therefore won't be linted.'''
+'''This test has no #$ symbols and therefore won't be linted. We get a special
+exit code 2 here.'''
 from src.tests.tools import pytest_runner
 
 ##################################################

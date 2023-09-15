@@ -1,1 +1,1 @@
-Immutable var declared on line number 11, but no names found.
+Immutable var declared on line number 10, but no names found.

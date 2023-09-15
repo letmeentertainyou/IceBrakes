@@ -110,7 +110,7 @@ def gen_output_for_all_test_0()-> None:
     time_in_mins = strftime("%Y%m%d-%H%M")
     backup_dir = f'{DATA}/relegated/{time_in_mins}'
     system(f'cp -r {DATA}/perm/ {backup_dir}')
-    system(f'rm -r {DATA}/perm/ && mkdir {DATA}/perm')
+    system(f'rm {DATA}/perm/test_0*.txt')
 
     for file in listdir(TESTS):
         if file[0:6] == 'test_0' and '_999.py' not in file:

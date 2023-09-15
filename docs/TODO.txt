@@ -1,6 +1,6 @@
 # MISSING FEATURES
 
-Implement tests #3-10 and #12.
+Implement tests #5-10 and #12.
 Loop awareness
 Scope awareness
 Lines that end in '\' awareness
@@ -8,88 +8,13 @@ Multi value assignments (tuple expansion)
 And other white space anomalies.
 
 
-
-
-ALGORITHM IMPROVEMENT IDEAS!
-
-These changes will not effect any of the API and therefore any of the tests.
-So I will use pytest with our 10 existing tests to time out how much
-these improvements speed up testing.
-
-This speedup in the tests will help as I add more and more tests because right now
-it takes about 0m0.800s to run the 10 tests I have. I'd like to keep that number low as possible.
-
-
-
-*** 
-Modify IceBrakes algo to only read each file once. You still build two
-dicts for CONSTANTS and ALL_VARS but you do it in one pass.
-
-This will be uglier code in some ways with a bit more nesting and a bit less
-DRY potential. 
-
-Our bigO time improvement looks like this:  O(Nᴹ + Nᴹ⁺¹)  ->  O(Nᴹ⁺¹)
-Where N is the length of the file and M is the amount of checks I do per line
-and the +1 represents the single extra check for #$ at the end of each line.
-
-I'm having real trouble parsing this math because it casts a pretty wide net.
-For smaller numbers we are looking at close to 100% speed up or double speed. Hopefully
-that works out for my tests but as the size of N and M grow this improvement matters less.
-
-Either way because the tests are very small the act of reading the file may actually be a
-huge time sink and I think that we might see some huge improvements in the tests. Which I'm
-now realizing is a classic trap to make one think their program is faster than it is.
-
-Still I want my tests to run faster so I can do more of everything else.
-
-The API change will look like this:
-function get_names_from_file() will not be called twice anymore, instead we will
-both dicts in one pass. This means the boolean check goes and the nifty logic with
-target='' goes too. Then this method can be called wherever the two dicts are needed.
-
-This one change will actually DRY this up a fair amount.
-
-
-*** 
-Modify IceBrakes algo to ignore names that aren't in the constants
-dict. This will skip a large amount of checks, and when more tests
-are run things will be way faster. 
-
-Use the names as keys and the indexes as values. This is what I should have done
-the whole time and it will be a time improvement on it's own as there are less total dict keys
-to loop over.
-
-(TIME ABOVE CHANGES BEFORE CONTINUING)
-
-Next; loop through the keys only and do all_vars.get(constants_key) to determine values.
-This is clever because it removes an entire for loop and python's get method is very fast.
-
-O(Nᴹ)  ->  O(N)
-
-I will have to review my code closely to figure out the real max time. It's written as a nested for
-loop wright now which is bad. I need to loop over every line of the file exactly 1 for the purpose
-of writing an output results.
-
-
-O(Nᴹ)  ->  O(N)
-O(Nᴹ + Nᴹ⁺¹)  ->  O(Nᴹ⁺¹)
-
-The proposed API change will alter the cross_reference() function.
-
-
-###
-
-The second change requires a major API break by inverting the dicts. So I will do the
-first change. Then when I need to do the second change I will edit both functions in a scratch
-file first.
-
-
 # CHANGELOG
 Enabled tests 0000, 0004, 1001
 Added exit codes 0, 1, 2
 Added States dataclass to remove globals from icebrakes.py
 Added whitespace.py as the first step in the scopes problem.
-
+Did the first algo change, got no speedup.
+Added test #### for invalid file names.
 
 
 Copyright © 2023 Lars S.
