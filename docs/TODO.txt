@@ -42,6 +42,13 @@ now realizing is a classic trap to make one think their program is faster than i
 
 Still I want my tests to run faster so I can do more of everything else.
 
+The API change will look like this:
+function get_names_from_file() will not be called twice anymore, instead we will
+both dicts in one pass. This means the boolean check goes and the nifty logic with
+target='' goes too. Then this method can be called wherever the two dicts are needed.
+
+This one change will actually DRY this up a fair amount.
+
 
 *** 
 Modify IceBrakes algo to ignore names that aren't in the constants
@@ -64,6 +71,17 @@ loop wright now which is bad. I need to loop over every line of the file exactly
 of writing an output results.
 
 
+O(Nᴹ)  ->  O(N)
+O(Nᴹ + Nᴹ⁺¹)  ->  O(Nᴹ⁺¹)
+
+The proposed API change will alter the cross_reference() function.
+
+
+###
+
+The second change requires a major API break by inverting the dicts. So I will do the
+first change. Then when I need to do the second change I will edit both functions in a scratch
+file first.
 
 
 # CHANGELOG
@@ -71,7 +89,7 @@ Enabled tests 0000, 0004, 1001
 Added exit codes 0, 1, 2
 Added States dataclass to remove globals from icebrakes.py
 Added whitespace.py as the first step in the scopes problem.
-O(Nᴹ)  ->  O(N)
-O(Nᴹ + Nᴹ⁺¹)  ->  O(Nᴹ⁺¹)
+
+
 
 Copyright © 2023 Lars S.
