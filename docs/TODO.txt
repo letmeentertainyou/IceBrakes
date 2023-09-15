@@ -36,14 +36,33 @@ I'm having real trouble parsing this math because it casts a pretty wide net.
 For smaller numbers we are looking at close to 100% speed up or double speed. Hopefully
 that works out for my tests but as the size of N and M grow this improvement matters less.
 
+Either way because the tests are very small the act of reading the file may actually be a
+huge time sink and I think that we might see some huge improvements in the tests. Which I'm
+now realizing is a classic trap to make one think their program is faster than it is.
+
+Still I want my tests to run faster so I can do more of everything else.
+
 
 *** 
 Modify IceBrakes algo to ignore names that aren't in the constants
 dict. This will skip a large amount of checks, and when more tests
-are run things will be way faster. Easy change. I have no idea how this would
-effect big O time other than that the bigger the constants dict is the less
-skips I get. But overall this should other a huge speedup for the tests which only
-usually declare one or two #$ anyways. 
+are run things will be way faster. 
+
+Use the names as keys and the indexes as values. This is what I should have done
+the whole time and it will be a time improvement on it's own as there are less total dict keys
+to loop over.
+
+(TIME ABOVE CHANGES BEFORE CONTINUING)
+
+Next; loop through the keys only and do all_vars.get(constants_key) to determine values.
+This is clever because it removes an entire for loop and python's get method is very fast.
+
+O(Nᴹ)  ->  O(N)
+
+I will have to review my code closely to figure out the real max time. It's written as a nested for
+loop wright now which is bad. I need to loop over every line of the file exactly 1 for the purpose
+of writing an output results.
+
 
 
 
@@ -52,5 +71,7 @@ Enabled tests 0000, 0004, 1001
 Added exit codes 0, 1, 2
 Added States dataclass to remove globals from icebrakes.py
 Added whitespace.py as the first step in the scopes problem.
+O(Nᴹ)  ->  O(N)
+O(Nᴹ + Nᴹ⁺¹)  ->  O(Nᴹ⁺¹)
 
 Copyright © 2023 Lars S.
