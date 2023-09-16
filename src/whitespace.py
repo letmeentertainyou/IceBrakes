@@ -6,8 +6,8 @@ My original thought process was naive and I assumed I needed to track every whit
 change but since I only care about namespaces it's actually a much simpler problem, and
 the main engines are already written.
 
-Below I lay out how I will use white_space_parse() from this file and paren_parse() from
-icebrakes.py to solve for namespaces.
+Below I lay out how I will use white_space_parse() from this file along with get_names_from_file()
+and paren_parse() from icebrakes.py to solve for namespaces.
 
 Here's the deal with scopes, only the keywords 'def', 'class', 'async def' can
 trigger a change in namespace. We don't need to track any other keywords. Words like
@@ -45,14 +45,13 @@ We want to parse than into an object that looks like this.
 
 root.foo
 root.foo.bar
+root.bar
 root.bar.foo
 
 I imagine that is a solved problem in python but it's one I will have to research.
 
-
 It might be worth implementing some OO for the name dicts. Some struct that contains two
-dicts. I'm not really sure it would change much but it might make passing things around
-a bit easier.
+dicts. It will make passing things around a bit easier.
 
 Because I already have paren_parse, I can actually use it to set a flag whenever a new
 scope is found, then we unset the flag later by tracking white space. This would basically
@@ -68,10 +67,6 @@ might look like, and then I will try building that engine. When this step is com
 the rest of the unit tests can be turned on because a large amount of them relate to white space.
 
 I will also need a new major feature to work towards (loops) but I'm sure something will come up.
-
-
-
-
 '''
 
 from math import gcd
