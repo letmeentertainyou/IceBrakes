@@ -14,7 +14,7 @@ class States():
     '''I had to many global states vars so now this dataclass keeps them all tidy.'''
     errors: bool = False
 
-DictIntStr = Dict[str, set]
+DictStrSet = Dict[str, set]
 
 
 def icebrakes(filepath: str) -> None:
@@ -59,8 +59,8 @@ def get_names_from_file(file: List[str], states: States) -> Tuple[dict, dict]:
         return equal_sign_parse(line)
 
 
-    all_vars: DictIntStr = {}
-    constants: DictIntStr = {}
+    all_vars: DictStrSet = {}
+    constants: DictStrSet = {}
     for index, line in enumerate(file):
         # I could do this with one less if statement but the boolean helps
         # Raise the edge case at the bottom of the function and I like that.
@@ -128,7 +128,7 @@ def equal_sign_parse(line: str) -> str:
     return name
 
 
-def cross_reference(constants: DictIntStr, all_vars: DictIntStr, states: States) -> None:
+def cross_reference(constants: DictStrSet, all_vars: DictStrSet, states: States) -> None:
     '''Once you have the constants and all_vars for a given python file you 
     can cross reference them to see if any constants are overwritten illegally 
     and inform the users.'''
