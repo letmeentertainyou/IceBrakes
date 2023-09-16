@@ -58,6 +58,11 @@ scope is found, then we unset the flag later by tracking white space. This would
 mean checking for the sub scope flag (or int?) every pass and then carefully tracking white
 space when it is set. This will have a huge time deficit but I always knew that.
 
+The reason I think we need an int instead of a bool for a flag is to track how many sub scopes
+deep we are. So 0 means root and 1 means one function def in, etc. Then every time we leave a scope,
+we subtract one, and once the number is 0 we're not in a scope anymore. This will work with a nice
+'if flag:' check because 0 is already falsey.
+
 In get_names_from_file() is where I should track white space and check flags. I need to count 
 the whitespace before stripping it, and move left/right accordingly. 
 
