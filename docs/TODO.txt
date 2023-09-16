@@ -15,6 +15,6 @@ Added States dataclass to remove globals from icebrakes.py
 Added whitespace.py as the first step in the scopes problem.
 Did the first algo change, got no speedup.
 Added test #### for invalid file names.
-
+Second algo change got 4.75x speedup.
 
 Copyright © 2023 Lars S.

@@ -14,7 +14,7 @@ class States():
     '''I had to many global states vars so now this dataclass keeps them all tidy.'''
     errors: bool = False
 
-DictIntStr = Dict[int, str]
+DictIntStr = Dict[str, set]
 
 
 def icebrakes(filepath: str) -> None:
@@ -45,7 +45,6 @@ def icebrakes(filepath: str) -> None:
     else:
         print(f'{filepath.rsplit("/")[-1]} is not a file. No linting possible.')
 
-
 def get_names_from_file(file: List[str], states: States) -> Tuple[dict, dict]:
     '''This function checks every line of a file and grabs names from those lines.'''
 
@@ -65,22 +64,23 @@ def get_names_from_file(file: List[str], states: States) -> Tuple[dict, dict]:
     for index, line in enumerate(file):
         # I could do this with one less if statement but the boolean helps
         # Raise the edge case at the bottom of the function and I like that.
-        target: bool = False
+        const_declared: bool = False
 
         if '#$' in line.rstrip()[-2:]:
-            target = True
+            const_declared = True
 
         name: str = get_name_from_line(line)
 
         if name:
-            all_vars[index +1] = name
-            if target:
-                constants[index +1] = name
+            all_vars.setdefault(name, set()).add(index + 1)
+            if const_declared:
+                constants.setdefault(name, set()).add(index + 1)
 
-        elif target:
+        elif const_declared:
             print(f'Immutable var declared on line number {index + 1}, but no names found.')
             states.errors=True
     return constants, all_vars
+
 
 # These parse methods for the basis on the whole project and
 # are subject to the most new code being written
@@ -133,10 +133,15 @@ def cross_reference(constants: DictIntStr, all_vars: DictIntStr, states: States)
     can cross reference them to see if any constants are overwritten illegally 
     and inform the users.'''
 
-    for c_key, c_val in constants.items():
-        for v_key, v_val in all_vars.items():
-            if c_val == v_val and v_key != c_key:
-                mes=f'Bad use {c_val} was made static on line {c_key}, and mutated on line {v_key}'
+    for name, values in constants.items():
+        for val in values:
+                                    # I tried default=set() but that broke my tests
+                                    # mypy is being dumb here because None seems to work
+            set_of_line_numbers = all_vars.get(name)
+            for num in set_of_line_numbers:          # type: ignore
+                if num == val:
+                    continue
+                mes=f'Bad use {name} was made static on line {val}, and mutated on line {num}'
                 print(mes)
                 states.errors = True
 

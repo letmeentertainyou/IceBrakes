@@ -20,3 +20,10 @@ $ alias gtree='git add --all && git commit -m $1'
 # The path would have to change to wherever you store the IceBrakes source code.
 $ alias uni='cd ~/Python/Projects/IceBrakes/ && ./unifier.sh && cd -'
 
+
+#### BENCHMARKS ####
+# I needed a larger python file to get a more realistic time improvement 
+# for my algo changes (to make me feel better). I found a very large python
+# file and this is my alias for timing a lint of that file.
+$ cd ~/Python/Projects/IceBrakes/src && time ./icebrakes.py bechmark.py.txt && cd -
+$ alias iceT='cd ~/Python/Projects/IceBrakes/src && time ./icebrakes.py benchmark.py.txt && cd -'

@@ -55,11 +55,28 @@ real    0m0.875s
 user    0m0.755s
 sys     0m0.122s
 
-Damn all that work for exactly no difference. If I was way more obsessed I could retime
-the before and after with way bigger test files but I don't want to keep the old code around
-for that.
 
-*** 
+It's worth noting that currently my tests are very very short files which has been 
+practical to maintain even though it's not realistic. I should grab some existing large
+open source python code, and add my silly marks to it and use it for benchmarking my
+program instead of the unit tests. I should have longer tests too.
+
+It's possible my current unit tests run at a pretty linear near O(1) already but that doesn't 
+invalidate my improvements or my math. 
+
+I added a new benchmark that is 16k lines long and declares #$ on every single line
+giving us our maximum possible runtime. We are not currently concerned with accurately
+linting this file but we do want to track algo time. Now even though I tried to make
+this fairly slow it still only takes 5.7 seconds. But I think that will be enough to
+mark any further improvements.
+
+***
+
+BEFORE TIMES:
+real    0m7.806s
+user    0m5.724s
+sys     0m0.782s
+
 Modify IceBrakes algo to ignore names that aren't in the constants
 dict. This will skip a large amount of checks, and when more tests
 are run things will be way faster. 
@@ -83,12 +100,13 @@ of writing an output results.
 O(Nᴹ)  ->  O(N)
 O(Nᴹ + Nᴹ⁺¹)  ->  O(Nᴹ⁺¹)
 
-The proposed API change will alter the cross_reference() function.
+This change was implemented in a scratchpad and move over to icebrakes.py without too much
+trouble. This testing suite has been invaluable so far.
 
+AFTER TIMES:
+real    0m4.427s
+user    0m1.233s
+sys     0m0.657s
 
-###
-
-The second change requires a major API break by inverting the dicts. So I will do the
-first change. Then when I need to do the second change I will edit both functions in a scratch
-file first.
-
+Nice! We went from 5.7 to 1.2 seconds and scored a 4.76x speed improvement. Now that both
+algo changes are done, I need to focus on the white space parsing.
