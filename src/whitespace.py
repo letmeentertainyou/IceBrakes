@@ -72,6 +72,15 @@ might look like, and then I will try building that engine. When this step is com
 the rest of the unit tests can be turned on because a large amount of them relate to white space.
 
 I will also need a new major feature to work towards (loops) but I'm sure something will come up.
+
+***************
+
+Upon further thinking I have realized that by creating unique keys I won't actually need to
+nested dict design pattern. Instead I will make a Naming() class that takes a name, and a
+States() object and builds unique name keys. Then anytime two keys match exactly we have
+a scope problem at the earliest place in the keys that match. I'm going to build the changes
+to both classes, and then build a name parsing engine and then I barely have to change any
+of the rest of the code.
 '''
 
 import sys

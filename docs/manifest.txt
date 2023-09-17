@@ -3,9 +3,14 @@ for that file. Such as docs or src/scripts. This keeps things semi clean while a
 for import files to be in the root dir. I also made a copy of test_manifest in the 
 src/tests dir because it's easier to read it that way while writing tests.
 
+* means needs to be added to README
+
 docs/
+    algo_change_history.txt *
+    commands.txt *
     CONTRIBUTING.txt
     IceBrakes API.txt
+    LICENSE.txt
     manifest.txt
     README.txt
     test_manifest.txt
