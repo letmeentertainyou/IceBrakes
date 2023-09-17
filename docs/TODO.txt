@@ -1,11 +1,18 @@
-# MISSING FEATURES
+# URGENT
+UPDATE README/TESTING DOCS
+UPDATE IceBrakes API.txt
+(I made some major changes for 0.1.1 and now the new API/functions need to be documented.)
 
+
+# MISSING FEATURES
 Implement tests #5-10 and #12.
 Loop awareness
 Scope awareness
 Lines that end in '\' awareness
 Multi value assignments (tuple expansion)
 And other white space anomalies.
+STRING AWARENESS NEEDED
+#ALSO COMMENTED LINES NEED TO BE IGNORED ENTIRELY
 
 
 # CHANGELOG
@@ -16,5 +23,7 @@ Added whitespace.py as the first step in the scopes problem.
 Did the first algo change, got no speedup.
 Added test #### for invalid file names.
 Second algo change got 4.75x speedup.
+Added scope/namespace awareness to the algo. Will add unit tests for scope next.
+
 
 Copyright © 2023 Lars S.

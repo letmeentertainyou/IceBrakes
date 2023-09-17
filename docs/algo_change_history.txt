@@ -110,3 +110,114 @@ sys     0m0.657s
 
 Nice! We went from 5.7 to 1.2 seconds and scored a 4.76x speed improvement. Now that both
 algo changes are done, I need to focus on the white space parsing.
+
+
+#### I FORGOT TO TIME THIS ####
+Below is all the notes I wrote about the algorithm changes I made to add scope awareness,
+I figured I would leave it documented here since it was pretty successful and I already typed
+it all out. There were some minor tweaks I had to make get this process working. See the git
+changelog from version 0.0.7 to 0.1.1 to see all code changes.
+
+Eventually the functions of this file may get pulled into icebrakes.py, but first I want to
+build my algorithms without breaking any of the unit tests.
+
+My original thought process was naive and I assumed I needed to track every white space
+change but since I only care about namespaces it's actually a much simpler problem, and
+the main engines are already written.
+
+Below I lay out how I will use white_space_parse() from this file along with get_names_from_file()
+and paren_parse() from icebrakes.py to solve for namespaces.
+
+Here's the deal with scopes, only the keywords 'def', 'class', 'async def' can
+trigger a change in namespace. We don't need to track any other keywords. Words like
+'for' and 'if' won't effect this is any way. My original line of thinking considered ternary 
+if statements as an edge case but they are not even on my radar anymore.
+
+So what do we really need? A different set of name dicts (constants/all_vars) for each sub 
+namespace which will be determined by one of the above keywords and a corresponding white 
+space change. We track when the white space goes back to it's original level, and that kills 
+the sub namespace.
+
+The good news is we don't need to parse lines more than once, but we need to juggle a lot
+more dictionaries. So I need to figure out an api or tool or recursion that allows us to
+sub name space for a while and then return out. 
+
+We also either need to parse each set of sub dicts as we are leaving the scope or we need a
+dict of all total dicts where the keys are related to the scope that we parse once after reading 
+the file. The keys can't be indentation level because two different functions can have the same 
+indent level and not be in each other's scopes.
+
+So the name of each function can kind of work as a key but they would need to be sub keyed to their
+outer scope, and then everything at the top would be named 'root'.
+
+Here is a python code example.
+
+def foo():
+    def bar():
+        pass
+
+def bar():
+    def foo():
+        pass
+        
+We want to parse than into an object that looks like this.
+
+root.foo
+root.foo.bar
+root.bar
+root.bar.foo
+
+I imagine that is a solved problem in python but it's one I will have to research.
+
+It might be worth implementing some OO for the name dicts. Some struct that contains two
+dicts. It will make passing things around a bit easier.
+
+Because I already have paren_parse, I can actually use it to set a flag whenever a new
+scope is found, then we unset the flag later by tracking white space. This would basically
+mean checking for the sub scope flag (or int?) every pass and then carefully tracking white
+space when it is set. This will have a huge time deficit but I always knew that.
+
+The reason I think we need an int instead of a bool for a flag is to track how many sub scopes
+deep we are. So 0 means root and 1 means one function def in, etc. Then every time we leave a scope,
+we subtract one, and once the number is 0 we're not in a scope anymore. This will work with a nice
+'if flag:' check because 0 is already falsey.
+
+In get_names_from_file() is where I should track white space and check flags. I need to count 
+the whitespace before stripping it, and move left/right accordingly. 
+
+Things are structured and functional enough now that I think I can achieve this change with
+only one or two additional functions. My next step will be to write out what those functions
+might look like, and then I will try building that engine. When this step is complete most of 
+the rest of the unit tests can be turned on because a large amount of them relate to white space.
+
+I will also need a new major feature to work towards (loops) but I'm sure something will come up.
+
+***************
+
+Upon further thinking I have realized that by creating unique keys I won't actually need the
+nested dict design pattern. Instead I will make a Naming() class that takes a name, and a
+States() object and builds unique name keys. Then anytime two keys match exactly we have
+a scope problem at the earliest place in the keys that match. I'm going to build the changes
+to both classes, and then build a name parsing engine and then I barely have to change any
+of the rest of the code.
+
+
+# Implement these tools in the following ways
+
+# Get indentation level at beginning of parse.
+# base_indent: int = white_space_parse()
+
+# Get the space at beginning of line
+# spaces: int = len('line') - len('line'.rsplit())
+
+# For every line parsed run these two lines
+# indent: int = spaces // base_indent
+# States.update_indent(indent)
+
+# When paren_parse returns positive add that name to states.names_in_scope
+# with the current indentation level.
+
+# Use name_gen() to get a real name only after 'if name:' checks
+# Use name_split() only when putting a name in message.
+
+# With those changes the test suite shouldn't be broken. Give it a try.
