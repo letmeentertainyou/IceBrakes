@@ -176,8 +176,15 @@ def name_split(name: str) -> str:
 
 # Implement these tools in the following ways
 
-# Run white_space_parse() on every line parsed.
-# Run states.update_indent() on every line parsed.
+# Get indentation level at beginning of parse.
+# base_indent: int = white_space_parse()
+
+# Get the space at beginning of line
+# spaces: int = len('line') - len('line'.rsplit())
+
+# For every line parsed run these two lines
+# indent: int = spaces // base_indent
+# States.update_indent(indent)
 
 # When paren_parse returns positive add that name to states.names_in_scope
 # with the current indentation level.
@@ -186,10 +193,6 @@ def name_split(name: str) -> str:
 # Use name_split() only when putting a name in message.
 
 # With those changes the test suite shouldn't be broken. Give it a try.
-
-
-
-
 
 
 def icebrakes(filepath: str) -> None:
