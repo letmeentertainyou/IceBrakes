@@ -23,6 +23,12 @@ docs/
     * TODO.txt (the current tasks to be done)
 
 
+relegated/
+    * old versions of the source code that have been preserved before major changes.
+    
+    * icebrakes.py v0.0.7
+
+
 src/
     scripts/
         * cleanup_toggle.py (enables/disables cleanup test)
@@ -37,8 +43,10 @@ src/
         data/
             perm/
                 * test sample output data
+
             tmp/
                 * test generated output data
+
         tests/
             * all the unit tests go here
 

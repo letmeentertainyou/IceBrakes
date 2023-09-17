@@ -2,7 +2,10 @@
 *.mypy_cache*
 *.pytest_cache*
 *cache*
-*relegated*
 *.coverage
+
+*src/tests/data/relegated*
+*relegated_doc.txt
+
 *scratchpad.txt
 *benchmark*
