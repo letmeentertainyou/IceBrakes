@@ -11,6 +11,9 @@ find . -name '*.py' | xargs wc -l | sort
 # toggle the cleanup test off/only
 $ alias ctog='~/Python/Projects/IceBrakes/src/scripts/cleanup_toggle.py'
 
+# convert all sym links to hard links (stolen from superuser)
+$ find -type l -exec bash -c 'ln -f "$(readlink -m "$0")" "$0"' {} \;
+
 
 #### GIT ####
 

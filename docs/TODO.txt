@@ -1,21 +1,22 @@
 # URGENT
-UPDATE README/TESTING DOCS
-UPDATE IceBrakes API.txt
-(I made some major changes for 0.1.1 and now the new API/functions need to be documented.)
+
+Update IceBrakes API.txt with the 0.1.1 changes.
+Implement tests #5-10 and #12.
+Then update TESTING_README.txt and test_manifest.txt
+Some of these tests might involve changes that require additional documentation
 
 
 # MISSING FEATURES
-Implement tests #5-10 and #12.
+
 Loop awareness
-Scope awareness
 Lines that end in '\' awareness
 Multi value assignments (tuple expansion)
-And other white space anomalies.
-STRING AWARENESS NEEDED
-#ALSO COMMENTED LINES NEED TO BE IGNORED ENTIRELY
+String awareness (ignore parsed words in quotes)
+# Commented lines need to be skipped. (easiest change)
 
 
 # CHANGELOG
+
 Enabled tests 0000, 0004, 1001
 Added exit codes 0, 1, 2
 Added States dataclass to remove globals from icebrakes.py
@@ -24,6 +25,6 @@ Did the first algo change, got no speedup.
 Added test #### for invalid file names.
 Second algo change got 4.75x speedup.
 Added scope/namespace awareness to the algo. Will add unit tests for scope next.
-
+Cleaned up docs/manifest.txt quite a bit,
 
 Copyright © 2023 Lars S.

@@ -73,20 +73,8 @@ and lots of documentation. Now that the docs are written I will focus on adding 
 and more test cases.
 
 Once more features are added you can expect this document to expand and possibly split 
-into multiple further documents. If you are looking for more information there is 
-already a docs directory containing the following things.
-    
-    * CONTRIBUTING.txt (How to help document and write code for IceBrakes)
-
-    * manifest.txt (list of all files in the root dir)
-    
-    * README.txt (this document)
-    
-    * test_manifest.txt (list of all tests)
-    
-    * TODO.txt (the current tasks to be done)
-    
-    * TESTING_README.txt (a writeup of the testing methodology and tools)
+into multiple further documents. If you are looking for more information see docs/manifest.txt
+which explains all of the files in IceBrakes.
 
 
 *** Why does IceBrakes exist? ***

@@ -1,7 +1,6 @@
 # THIS DOCUMENT MIGHT BE OUTDATED SINCE THE LAST CHANGES!!!!
 # Double check the function params and returns. At least a few have changed.
 
-
 This document contains all the functions and their apis from icebreaks.py,
 if you can think of a question this doc does not answer then please submit 
 a DOCS pull request.
@@ -28,8 +27,6 @@ GLOBALS
 CLASSES 
 
 *** States():
-
-    States.all_mode determines if we are linting for all names in a file or just those on lines ending in #?.
 
     States.errors is used to track whether the lint failed or passed. And helps with the error codes too.
 

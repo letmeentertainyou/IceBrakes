@@ -1,84 +1,83 @@
-NOTE: Many of the files that appear in root are sym links to the appropriate location
-for that file. Such as docs or src/scripts. This keeps things semi clean while allowing
-for import files to be in the root dir. I also made a copy of test_manifest in the 
-src/tests dir because it's easier to read it that way while writing tests.
+__init__.py files are ignored in this doc.
 
-* means needs to be added to README
 
 docs/
-    algo_change_history.txt *
-    commands.txt *
-    CONTRIBUTING.txt
-    IceBrakes API.txt
-    LICENSE.txt
-    manifest.txt
-    README.txt
-    test_manifest.txt
-    TESTING_README.txt
-    TODO.txt
+    * algo_change_history.txt (A history of new feature write ups)
+
+    * commands.txt (aliases I use for the project, and useful commands.)
+
+    * CONTRIBUTING.txt (How to help document and write code for IceBrakes)
+
+    * icebrakes API.txt (A break down of all the functions and their parameters)
+
+    * LICENSE.txt (gplv3)
+
+    * manifest.txt (list of all files in the root dir)
+    
+    * README.txt (this document)
+    
+    * test_manifest.txt (list of all tests)
+    
+    * TESTING_README.txt (a writeup of the testing methodology and tools)
+
+    * TODO.txt (the current tasks to be done)
 
 
 src/
     scripts/
-        pre-commit
-        unifier.sh
-    main.py
+        * cleanup_toggle.py (enables/disables cleanup test)
 
+        * pre-commit (runs unifier.sh on commit attempts)
 
-src/tests/
-    tools.py
-    template.py
-    data/perm
-    data/tmp
+        * unifier.sh (turns the cleanup test on, and runs pytest/mypy/pylint)
 
+    * icebrakes.py (the main file, documented in docs/icebrakes API.txt)
 
-src/tests/tests/*
-    all the unit tests.
+    tests/
+        data/
+            perm/
+                * test sample output data
+            tmp/
+                * test generated output data
+        tests/
+            * all the unit tests go here
+
+    * template.py (used to create new unit tests)
+
+    * tools.py (helpful tools documented in docs/TESTING_README.txt)
 
 
 *** config files in the root dir ***
 
-NOTE: A few of these config settings come from a personal project with more modules, 
+A few of these config settings come from a personal project with more modules, 
 and so the path corrections may be overkill for the current state of this project 
-but they will help if I add modules.
+but they will help if I add modules. These are formatted different because of the 
+longer write ups.
 
 
-# .coveragerc
+/.coveragerc
 This file tells pytest --cov which python files I am not testing. This includes __init__.py, 
 the tests themselves, lines like 'if __name__ == "__main__":', and 'def main()' as in my coding 
 style these things usually do not need to be on the coverage report.
 
-
-# .pylintrc
+/.pylintrc
 Python paths are weird and even when other tools work fine pylint likes to throw this error E0401 
 and I don't like getting imperfect lint scores so I just remove that error. It has no berring on 
 whether the code actually resolves my imports correctly.
 
-
-# mypy.ini
+/mypy.ini
 A whole bunch of settings to make mypy way more hardcore. Read the file for more hints.
 Add a rule to ignore test_*.py files here.
 
-
-# pyproject.toml
+/pyproject.toml
 Seriously more python path fixes one is for pytest (also needed is my path corrections 
 in src/__init__.py) and another path fix is for mypy's stubgen. Currently this project doesn't 
 have any stubs so this is kind of irrelevant but again it will be nice to have if I add 
 a need for stubs.
 
-
-# pyrightconfig.json
+/pyrightconfig.json
 This file tells vscode which dirs I don't want linting in. It's mostly for all the cache 
 files python likes to generate. This is an attempt to speed up vscode startups. 
-
-
-# unifier.sh 
-This is an internal tool I use to run pylint/mypy/pytest at once.
-
-
-# STUBS
-This project doesn't have any custom types yet but I will add stubs as soon 
-as they are needed.
 
 
 Copyright © 2023 Lars S.
