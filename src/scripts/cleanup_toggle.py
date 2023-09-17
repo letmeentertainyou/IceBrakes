@@ -1,7 +1,7 @@
 #!/bin/python3
-'''this script toggles test_9999_cleanup.py on and off. this helps because
-while i don't want to push the tmp test data to the repo i often do need
-to read that data to diagnose failing tests. i often manually disable and
+'''This script toggles test_9999_cleanup.py on and off which helps because
+while I don't want to push the tmp test data to the repo I often do need
+to read that data to diagnose failing tests. I often manually disable and
 reenable the cleanup test and this seeks to speed things up.'''
 
 from os import listdir, rename
