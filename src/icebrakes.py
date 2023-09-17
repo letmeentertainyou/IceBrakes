@@ -95,8 +95,6 @@ def get_names_from_file(file: List[str], states: States) -> Tuple[dict, dict]:
         indent: int = spaces // base_indent               ### NEW
         states.update_indent(indent)                      ### NEW
 
-        # I could do this with one less if statement but the boolean helps
-        # Raise the edge case at the bottom of the function and I like that.
         const_declared: bool = False
 
         if '#$' in line.rstrip()[-2:]:
@@ -152,8 +150,8 @@ def equal_sign_parse(line: str) -> str:
         for char in line[:idx]:
 
             # Massive BUG fix here.                   ### NEW
-            all_chars = list(string.ascii_lowercase + string.ascii_uppercase + string.digits + '_')
-            if char not in all_chars:
+            name_chars = list(string.ascii_lowercase + string.ascii_uppercase + string.digits + '_')
+            if char not in name_chars:
                 break
             name += char
         return name
@@ -183,8 +181,7 @@ def cross_reference(constants: DictStrSet, all_vars: DictStrSet, states: States)
 
     for key, values in constants.items():
         for val in values:
-                                    # I tried default=set() but that broke my tests
-                                    # mypy is being dumb here because None seems to work
+
             set_of_line_numbers = all_vars.get(key)
 
             if set_of_line_numbers is not None:
@@ -201,7 +198,7 @@ def cross_reference(constants: DictStrSet, all_vars: DictStrSet, states: States)
         print('Congrats you passed the IceBrakes lint with a perfect 300/300 score!')
 
     # This could be a return statement if we won't want to sys.exit on every call
-    sys.exit(int(states.errors))     # I was gonna use two bools but this is damn clever.
+    sys.exit(int(states.errors))
 
 
 def white_space_parse(file: List[str]) -> int:
@@ -234,7 +231,7 @@ def white_space_parse(file: List[str]) -> int:
                 size = len(line) - len_line_lstrip
                 levels.add(size)
     if levels:
-        # tnt here is also for mypy
+        # int here is also for mypy
         return int(reduce(gcd, levels))
 
     # This is just for mypy/pylint

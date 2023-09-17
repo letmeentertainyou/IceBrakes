@@ -111,8 +111,8 @@ sys     0m0.657s
 Nice! We went from 5.7 to 1.2 seconds and scored a 4.76x speed improvement. Now that both
 algo changes are done, I need to focus on the white space parsing.
 
+#######################################################################################
 
-#### I FORGOT TO TIME THIS ####
 Below is all the notes I wrote about the algorithm changes I made to add scope awareness,
 I figured I would leave it documented here since it was pretty successful and I already typed
 it all out. There were some minor tweaks I had to make get this process working. See the git
@@ -202,22 +202,28 @@ to both classes, and then build a name parsing engine and then I barely have to 
 of the rest of the code.
 
 
-# Implement these tools in the following ways
+Implement these tools in the following ways
 
-# Get indentation level at beginning of parse.
-# base_indent: int = white_space_parse()
+Get indentation level at beginning of parse.
+base_indent: int = white_space_parse()
 
-# Get the space at beginning of line
-# spaces: int = len('line') - len('line'.rsplit())
+Get the space at beginning of line
+spaces: int = len('line') - len('line'.rsplit())
 
-# For every line parsed run these two lines
-# indent: int = spaces // base_indent
-# States.update_indent(indent)
+For every line parsed run these two lines
+indent: int = spaces // base_indent
+States.update_indent(indent)
 
-# When paren_parse returns positive add that name to states.names_in_scope
-# with the current indentation level.
+When paren_parse returns positive add that name to states.names_in_scope
+with the current indentation level.
 
-# Use name_gen() to get a real name only after 'if name:' checks
-# Use name_split() only when putting a name in message.
+Use name_gen() to get a real name only after 'if name:' checks
+Use name_split() only when putting a name in message.
 
-# With those changes the test suite shouldn't be broken. Give it a try.
+With those changes the test suite shouldn't be broken. Give it a try.
+
+
+AFTER TIMES:
+real    0m1.834s
+user    0m1.713s
+sys     0m0.114s
