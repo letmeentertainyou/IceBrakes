@@ -1,14 +1,18 @@
 [MESSAGES CONTROL]
 
-disable=E0401,C0104
+disable=E0401,C0104,R0801
 
 
 # E0401 | import-error
 # This seems to be the easiest way to fix
 # PyLint's inability to handle relative imports
 
-# If you disable any more lints in this file use the above format to explain them
 
 # C0104 | disallowed-name
 # Pylint is just being dumb here, I didn't ask them what var names I'm allowed to use.
 # Without disable this, then foo and bar aren't allowed in my tests.
+
+
+# R0801 | duplicate-code
+# This one is actually stupid, I'm very well aware of when I have duplicated code and
+# pylint can mind it's own business on that front.

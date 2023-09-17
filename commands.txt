@@ -8,6 +8,9 @@ $ python -m build
 # Python files by line length
 find . -name '*.py' | xargs wc -l | sort
 
+# toggle the cleanup test off/only
+$ alias ctog='~/Python/Projects/IceBrakes/src/scripts/cleanup_toggle.py'
+
 
 #### GIT ####
 

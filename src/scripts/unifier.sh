@@ -1,5 +1,11 @@
 #!/bin/bash
 
+# Before pytest, makesure cleanup is enabled so that
+# extra files aren't pushed to the repo. 
+
+echo 'forcing cleanup test on'
+src/scripts/cleanup_toggle.py -en
+
 # Now this script captures the exit codes so that I can run a commit hook
 # That only allows commits when unifier exits 0
 
