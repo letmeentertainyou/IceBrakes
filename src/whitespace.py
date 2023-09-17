@@ -91,6 +91,8 @@ from math import gcd
 from os.path import isfile
 from typing import Dict, List, Tuple, Set
 
+DictStrSet = Dict[str, set]
+
 
 def white_space_parse(file: str) -> int:
     '''Takes a file, calculates the indentation level using magic.
@@ -138,11 +140,56 @@ def white_space_parse(file: str) -> int:
 # The indentation levels.
 @dataclass
 class States():
-    '''I had to many global states vars so now this dataclass keeps them all tidy.'''
+    '''This is a bit of a catchall class it handles global state bools, as well
+    as namespace scoping tools.'''
     errors: bool = False
     indent: int = 0
+    names_in_scope = [('root', 0)]
 
-DictStrSet = Dict[str, set]
+
+    def update_indent(self, indent: int) -> None:
+        '''This method updates the indent level and when the indent level
+        goes to the left we attempt to leave the current scope.'''
+        old_indent: int = self.indent
+        self.indent = indent
+        if self.indent < old_indent:
+            self.leave_scope()
+
+
+    def leave_scope(self) -> None:
+        '''This method pops the last name from names_in_scope when then
+        indent level is less than it was when that name was added to the scope.'''
+        if self.indent < self.names_in_scope[-1][1]:
+            self.names_in_scope.pop()
+
+
+def name_gen(name: str, states: States) -> str:
+    '''Create unique keys for the name dicts using names_in_scope to create a path.'''
+    # This is weird because names_is_scope uses tuples now.
+    temp: List = [name[0] for name in states.names_in_scope] + [name]
+    return '.'.join(temp)
+
+def name_split(name: str) -> str:
+    '''Returns only the name from a scope string for communicating with users.'''
+    return name.rsplit('.')[-1]
+
+
+# Implement these tools in the following ways
+
+# Run white_space_parse() on every line parsed.
+# Run states.update_indent() on every line parsed.
+
+# When paren_parse returns positive add that name to states.names_in_scope
+# with the current indentation level.
+
+# Use name_gen() to get a real name only after 'if name:' checks
+# Use name_split() only when putting a name in message.
+
+# With those changes the test suite shouldn't be broken. Give it a try.
+
+
+
+
 
 
 def icebrakes(filepath: str) -> None:
