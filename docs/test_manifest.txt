@@ -6,7 +6,7 @@ for features that will be written, then turn the tests on when the feature exist
 
 IceBrakes and pylint have some overlap and you may see pylint disabled for entire
 tests because it pops way too many errors. I'll try to make sure white space issues
-are addressed before disable pylint.
+are addressed before disabling pylint.
 
 
 *   the test is written but the feature is not written.
