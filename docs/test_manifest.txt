@@ -4,11 +4,18 @@ Instead of writing a bunch of tests for the existing features, instead write tes
 for features that will be written, then turn the tests on when the feature exists.
 (Also write tests for existing features too!)
 
+IceBrakes and pylint have some overlap and you may see pylint disabled for entire
+tests because it pops way too many errors. I'll try to make sure white space issues
+are addressed before disable pylint.
+
+
 *   the test is written but the feature is not written.
 
 **  neither the test nor the feature are written. This is like fantasy football for tests.
 
 *** the test file is being used to develop a complex feature and the final test will be more elaborate.
+
+**** feature is written and test is not
 
 0000
 This test passes the lint, and gives exit code 0.
@@ -39,8 +46,16 @@ properties.
 Added support for +=, -=, //= etc operators.
 0012 *
 Still need support for := operator because it is usually prefaced by something like 'if'.
+0013
+Checks that IceBrakes ignores comments (# only)
+0014
+First scope test.
+0015 ****
+More in depth scope test.
+0016 ****
+Very elaborate scope test.
 
- 
+
 1000 **
 What happens if main.py is given a non python file? Either the wrong file extension or non ascii text.
 

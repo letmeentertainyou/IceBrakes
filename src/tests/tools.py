@@ -33,9 +33,12 @@ def parse_argv(args: List[str]) -> None:
         if mode == '-a':
             gen_output_for_all_test_0()
         else:
-            _test_file = int_to_filepath(args[1])
-            system(f'{MAIN} {TESTS}/{_test_file} > {DATA}/perm/{_test_file[:-3]}.txt')
-            print(f'Created new sample output for {_test_file} .')
+            test_file = int_to_filepath(args[1])
+            if isfile(f'{TESTS}/_{test_file}'):
+                system(f'mv {TESTS}/_{test_file} {TESTS}/{test_file} ')     ### NEW
+                print(f'Enabled {test_file}')                               ### NEW
+            system(f'{MAIN} {TESTS}/{test_file} > {DATA}/perm/{test_file[:-3]}.txt')
+            print(f'Generated new sample output for {test_file} .')
 
     if tot == 3:
         if mode == '-n':         # Make a new test based on the template.
@@ -44,9 +47,9 @@ def parse_argv(args: List[str]) -> None:
             _test_file = f'{TESTS}/_{test_name}'
             test_file = f'{TESTS}/{test_name}'
             if not isfile(_test_file) and not isfile(test_file):
-                system(f'cp ../{TESTS}/template.py {_test_file}')
+                system(f'cp {TESTS}/../template.py {_test_file}')    # BUG FIX
                 system(f"sed -i 's/test_number/{num}/g' {_test_file}")
-                print(f'Created {test_name} from template.py')
+                print(f'Created _{test_name} from template.py')
 
             else:
                 print(f'{test_name} already exists, please delete it first.')

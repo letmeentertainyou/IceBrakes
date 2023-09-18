@@ -1,0 +1,1 @@
+No constants declared, use #$ at then end of a line with a declaration.

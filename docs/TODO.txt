@@ -1,18 +1,19 @@
 # URGENT
 
 Update IceBrakes API.txt with the 0.1.1 changes.
-Implement tests #5-10 and #12.
+
 Then update TESTING_README.txt and test_manifest.txt
 Some of these tests might involve changes that require additional documentation
 
 
 # MISSING FEATURES
+Implement tests #5-10 and #12 (detailed bellow)
 
-Loop awareness
-Lines that end in '\' awareness
-Multi value assignments (tuple expansion)
-String awareness (ignore parsed words in quotes)
-# Commented lines need to be skipped. (easiest change)
+    Assigning a shallow copy to a new name which causes mutation
+    Loop awareness
+    Lines that end in '\' awareness
+    Multi value assignments (tuple expansion)
+    String awareness (ignore parsed words in quotes)
 
 
 # CHANGELOG
@@ -26,5 +27,8 @@ Added test #### for invalid file names.
 Second algo change got 4.75x speedup.
 Added scope/namespace awareness to the algo. Will add unit tests for scope next.
 Cleaned up docs/manifest.txt quite a bit,
+Hashmark commented lines are now skipped.
+Tests 13, 14 added.
+
 
 Copyright © 2023 Lars S.

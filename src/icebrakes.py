@@ -83,12 +83,13 @@ def get_names_from_file(file: List[str], states: States) -> Tuple[dict, dict]:
 
     base_indent: int = white_space_parse(file)         ### NEW
 
-    # Find room for an if states.indent path, and then get ready for all the dict stuff.
     all_vars: DictStrSet = {}
     constants: DictStrSet = {}
 
     for index, line in enumerate(file):
-        if line == '\n':                                  ### NEW
+                           # This check should skip commented lines.
+                           # Could use a test to ensure this works.
+        if line == '\n' or line.lstrip()[0] == '#':       ### NEW
             continue                                      ### NEW
 
         spaces: int = len(line) - len(line.lstrip())      ### NEW

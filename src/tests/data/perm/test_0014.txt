@@ -1,0 +1,1 @@
+Bad use bar was made static on line 14, and mutated on line 18
