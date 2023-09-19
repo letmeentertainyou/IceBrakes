@@ -1,0 +1,27 @@
+Tracking bugs will help me to write tests for the bugs and having tests for
+any known bugs will keep them at bay. I will use bugs as insight to a line of 
+thinking I previously missed. Bugs and their associated tests will have the 
+same number and start with a 2.
+
+BUG 2000
+Old code:
+if line == '\n' or line_lstrip[0] == '#':
+    continue
+
+New code:
+if line == '\n' or len_line_lstrip == 0 or line_lstrip[0] == '#':
+    continue
+
+The len_line_lstrip == 0 check prevents us from indexing into an empty len array.
+This would occur when a line.lstrip() removed every char in a line. I'm not sure why
+every single file wasn't constantly triggering this bug. I only found it when linting 
+icebrakes.py itself.
+
+I was trying to write the test for this bug and when I removed the bug fix I no longer
+got the cursed run time failure so I'm not sure what haunted ascii white space char caused
+that. I am going to keep the bug fix though because there is no compiler to protect python
+users.
+
+Untested because I couldn't recreate. This is a good example of how I should focus on
+testing as soon as I discover bugs so that I know where they truly come from. We should continue
+to track bugs even if they can't be recreated.

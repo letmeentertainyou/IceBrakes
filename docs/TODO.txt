@@ -1,11 +1,3 @@
-# URGENT
-
-Update IceBrakes API.txt with the 0.1.1 changes.
-
-Then update TESTING_README.txt and test_manifest.txt
-Some of these tests might involve changes that require additional documentation
-
-
 # MISSING FEATURES
 Implement tests #5-10 and #12 (detailed bellow)
 
@@ -106,6 +98,7 @@ Test 15 created.
 Outlines written in TODO.txt
 Cleaned up icebrakes.py with some minor performance tweaks.
 Overhauled docs/IceBrakes API.txt
+Added bug testing policy
 
 
 Copyright © 2023 Lars S.

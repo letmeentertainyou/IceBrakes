@@ -4,6 +4,8 @@ __init__.py files are ignored in this doc.
 docs/
     * algo_change_history.txt (A history of new feature write ups)
 
+    * bug_tracker.txt (known bugs, and notes about them)
+    
     * commands.txt (aliases I use for the project, and useful commands.)
 
     * CONTRIBUTING.txt (How to help document and write code for IceBrakes)

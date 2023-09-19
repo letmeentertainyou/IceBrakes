@@ -17,6 +17,8 @@ are addressed before disabling pylint.
 
 **** feature is written and test is not
 
+#### LINTING TESTS ####
+
 0000
 This test passes the lint, and gives exit code 0.
 0001
@@ -54,6 +56,8 @@ First scope test.
 More in depth scope test.
 
 
+#### FILESYSTEM TESTS ####
+
 1000 **
 What happens if main.py is given a non python file? Either the wrong file extension or non ascii text.
 
@@ -62,43 +66,17 @@ Start with file extensions, and then see if there is a python way to test if a f
 1001
 Use pytest_runner and existing test files to capture and test the expected exit codes.
 
-1002 ***
-
-### THIS IS WRITTEN ###
-First learn tools/methods to identify the whitespace format of a python file (how many spaces/tabs)
-because assuming 4 could cause real issues. 
-
-
-Take all strings in a file (or some sample)
-Determine only lines that start with whitespace but also have non space chars
-(len(line.lstrip() > 0))  # To find non space chars in a line
-
-Then we take all those spaces and do math to find a common denominator
-2 4 6 8
-1 2 3 4
-3 6 9 12
-t t t t
-tt tt tt tt
-etc.
-The denominator is what I want.
-
-
-### NOT WRITTEN YET ###
-Once I can do that, then I need to write an engine for jumping
-forwards and backwards by the indent level. Then I need to start parsing for keywords that cause indentation.
-(Get a whole list of those bad boys.)
-
-Then we can tackle the goal of teaching IceBrakes to comprehend scopes and then turn on the missing tests.
-
-Then some much more elaborate white space tests need to be written to validate that scopes are correct.
-
-
-1003
+1002
 This is the same as test 0 but with an invalid filename. To test the invalid file name case. 
 This test is a bit weird because it requires an invalid name so it actually tries to lint 
 test_0###.py which doesn't exist. 
 
 
+#### BUG FIX TESTS ####
+(currently empty)
+
+
+#### FINAL TEST ####
 9999_cleanup
 Cleans up the src/tests/data/tmp dir.
 

@@ -1,3 +1,16 @@
+# URGENT
+WHENEVER A BUG IS FOUND, AND FIXED, WRITE A TEST!
+
+This is a new addition to the methodology. Now any bug fixes need
+to be manually tested so that they will be caught easier in the feature.
+
+I understand now why bugs are assigned numbers and documented. While it is
+often easy to patch the bugs I discover, I am not really documenting them
+and that leaves me exposed to doing the exact same work over and over again.
+
+Bug tests will start with the number 2.
+
+
 *** Addendum ***
     Most of the these tools only apply to tests starting in 0 now.
     test_0000.py to test_0999.py, this gives us 1000 tests following
