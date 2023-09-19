@@ -1,3 +1,5 @@
+version=0.1.3
+
 *** Using IceBrakes ***
 
 Make sure icebrakes.py is executable (use chmod if it isn't)
@@ -80,8 +82,8 @@ which explains all of the files in IceBrakes.
 *** Why does IceBrakes exist? ***
 
 I fully realize that the last thing your project needs is another linter. IceBrakes uses pylint, 
-mypy and pytest in the 0.0.1 version so I am aware how many tools exist, and how little desire I 
-have to add more tools (and config files) to my project.
+mypy and pytest so I am aware how many tools exist, and how little desire I have to add more tools 
+and config files to my project.
 
 Why am I writing IceBrakes then? This is my first public project, and I am using it as a chance for me 
 to practice documenting and testing a project. Improving my skills as a developer and communicator are 

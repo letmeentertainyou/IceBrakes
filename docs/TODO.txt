@@ -9,11 +9,84 @@ Some of these tests might involve changes that require additional documentation
 # MISSING FEATURES
 Implement tests #5-10 and #12 (detailed bellow)
 
-    Assigning a shallow copy to a new name which causes mutation
-    Loop awareness
-    Lines that end in '\' awareness
-    Multi value assignments (tuple expansion)
-    String awareness (ignore parsed words in quotes)
+    *Directory support
+
+        IceBrakes should run with either a file or a dir of files as input. I will add
+        a bool to get_names_from_file() that tracks when a dir is being parsed. When
+        in dir_more we return an exit code instead of exiting with that code. Here is an
+        example of the code.
+
+        def get_names_from_file(file: str, dir_mode: bool=False) -> int:
+            exit_code: int = 0
+            if dir_mode:
+                return exit_code
+            else:
+                exit(exit_code)
+
+        Then the dir function just collects all the exit codes and prints them all
+        for now. This won't break a single unit test or the API.
+
+
+    * Loop awareness
+
+        This is not too different from parsing def/class etc. Basically the rule is just
+        "You can never assign an immutable in the body of a loop." So we only care about
+        loops when building the constants dict. This error is different because it's an 
+        illegal use of "#$" all together. We will give the message "Constant assigned 
+        inside of a loop on line ##, consider assigning outside of the loop instead."
+        
+        We also need a way to track whether or not we're in the body of a loop,
+        and I'm not sure of the fastest way to do that yet. The indentation level is already
+        being tracked so all we need is a like a "in loop" bool.
+
+        "break" statements are a weird edge case here because I'm not executing or following the
+        logic of the code, and I really can't think of a way a break statement would effect
+        immutable vars. Instead I'll be concerned only with whitespace for exiting loops. 
+
+        We have to track every single loop in order to know if "#$" is being used inside a loop
+        so there isn't really a shortcut here.
+
+
+    * Assigning a shallow copy to a new name which causes mutation
+
+        I don't think this will be too tricky but it's gonna have a lot of processing overhead
+        because before I only cared about name assignments that matched the constants dict and
+        after this change I will need to track the values assigned to all names in the file to
+        make sure none of the constants are shallow copied to another name. So we might gain an
+        an order of magnitude in time.
+
+
+    * Multiline assignment (weird whitespace hack)
+
+        I just remembered this is legal in python and I have no clue how to parse for it.
+
+        bar: List = [1,
+                     2,
+                     3,
+                     4 ]
+
+        This relates heavily to the topic of shallow copies but it affects all assignments.
+
+
+    * Lines that end in '\' awareness
+
+        I haven't really thought about this one yet because I think it's going to change a lot
+        of my algorithm, I'm not really sure how to approach it. I suppose another boolean in
+        States() to track if we are on a multiline is a good start. 
+        
+
+   *  String awareness (ignore parsed words in quotes)
+        
+        This may be my first real use case for regex, I honestly don't know how to
+        approach this problem yet but I will think about it after a few more features/docs 
+        are done.
+
+
+    * Multi value assignments (tuple expansion)
+
+        This might take regex too, this one seems the most complicated to me but I just
+        need to notate all the edge cases for the comma character in python and then make
+        a plan.
 
 
 # CHANGELOG
@@ -29,6 +102,10 @@ Added scope/namespace awareness to the algo. Will add unit tests for scope next.
 Cleaned up docs/manifest.txt quite a bit,
 Hashmark commented lines are now skipped.
 Tests 13, 14 added.
+Test 15 created.
+Outlines written in TODO.txt
+Cleaned up icebrakes.py with some minor performance tweaks.
+Overhauled docs/IceBrakes API.txt
 
 
 Copyright © 2023 Lars S.

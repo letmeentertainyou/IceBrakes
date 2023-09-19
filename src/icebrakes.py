@@ -23,32 +23,28 @@ class States():
     errors: bool = False
     indent: int = 0
     old_indent: int = -999
-    names_in_scope = [('root', 0)]
 
+    def __post_init__(self) -> None:
+        '''Dataclasses can't have lists as properties so this post_init is required.'''
+        self.names_in_scope: List[Tuple] = [('root', 0)]
 
     def update_indent(self, indent: int) -> None:
         '''This method updates the indent level and when the indent level
-        goes to the left we attempt to leave the current scope.'''
+        goes down it leaves the current scope.'''
         self.old_indent = self.indent
         self.indent = indent
-        if self.indent < self.old_indent:
-            self.leave_scope()
 
-
-    def leave_scope(self) -> None:
-        '''This method pops the last name from names_in_scope when then
-        indent level is less than it was when that name was added to the scope.'''
         if self.indent < self.names_in_scope[-1][1]:
+            # This takes us up one level of scope
             self.names_in_scope.pop()
 
 
 def icebrakes(filepath: str) -> None:
-    '''takes a single argument filepath is a string that points to
-    a file, then IceBrakes begins linting the file by collecting all 
-    named assignments and any references to const variables (#$) '''
+    '''This function takes a python file and lints it.'''
 
     states = States()
 
+    # These file checks/messages will be removed from this function soon.
     if isfile(filepath):
         with open(filepath, 'r', encoding='utf-8') as filehandler:
             file: List[str] = filehandler.readlines()
@@ -66,35 +62,38 @@ def icebrakes(filepath: str) -> None:
 
 
 def get_names_from_file(file: List[str], states: States) -> Tuple[dict, dict]:
-    '''This function checks every line of a file and grabs names from those lines.'''
+    '''This function parses a python file for any names declared and builds two dictionaries.
+    One dict is for all_vars in the file and one dict is only for constants. Constants are 
+    defined as vars declared on a line ending in #$.'''
 
     def get_name_from_line(line: str, indent: int) -> str:
         '''This function takes a line of a file and runs all the name parse funcs
-        over the line. Once a nonempty string is found a name is returned.'''
+        over the line. Once a nonempty string is found a name is returned. When paren_parse() 
+        returns a nonempty string get_names_from_line() updates the scope.'''
 
         line = line.lstrip()
         name: str = paren_parse(line)
         if name:                         # This is a tuple
-            states.names_in_scope.append((name, indent +1))   ### NEW
+            states.names_in_scope.append((name, indent +1))
             return name
-
 
         return equal_sign_parse(line)
 
-    base_indent: int = white_space_parse(file)         ### NEW
+    base_indent: int = white_space_parse(file)
 
     all_vars: DictStrSet = {}
     constants: DictStrSet = {}
 
     for index, line in enumerate(file):
-                           # This check should skip commented lines.
-                           # Could use a test to ensure this works.
-        if line == '\n' or line.lstrip()[0] == '#':       ### NEW
-            continue                                      ### NEW
+        line_lstrip: str = line.lstrip()
+        len_line_lstrip: int = len(line_lstrip)
 
-        spaces: int = len(line) - len(line.lstrip())      ### NEW
-        indent: int = spaces // base_indent               ### NEW
-        states.update_indent(indent)                      ### NEW
+        if line == '\n' or len_line_lstrip == 0 or line_lstrip[0] == '#':
+            continue
+
+        spaces: int = len(line) - len_line_lstrip
+        indent: int = spaces // base_indent
+        states.update_indent(indent)
 
         const_declared: bool = False
 
@@ -104,7 +103,7 @@ def get_names_from_file(file: List[str], states: States) -> Tuple[dict, dict]:
         name: str = get_name_from_line(line, indent)
 
         if name:
-            name = name_gen(name, states)                     ### NEW
+            name = name_gen(name, states)
             all_vars.setdefault(name, set()).add(index + 1)
             if const_declared:
                 constants.setdefault(name, set()).add(index + 1)
@@ -117,24 +116,24 @@ def get_names_from_file(file: List[str], states: States) -> Tuple[dict, dict]:
 
 
 def name_gen(name: str, states: States) -> str:
-    '''Create unique keys for the name dicts using names_in_scope to create a path.'''
+    '''Create unique keys for the all_vars/constants dicts using names_in_scope to create a key.'''
     temp: List = [name[0] for name in states.names_in_scope] + [name]
     return '.'.join(temp)
 
 
 def name_split(name: str) -> str:
-    '''Returns only the name from a scope string for communicating with users.'''
+    '''Gets all chars to the right of the last period in a string.'''
     return name.rsplit('.')[-1]
 
 
 def paren_parse(line: str) -> str:
-    '''paren_parse searches a line for one of these openers ['async def', 'def', 'class'] 
+    '''Searches a line for one of these openers ['async def', 'def', 'class'] 
     and if an opener is found then the string between the opener and "(" is returned.'''
     name: str = ''
     for opener in ['async def ', 'def ', 'class ']:
         if opener in line[0:len(opener)]:
             idx: int = line.index(opener)
-            for char in line[idx + len(opener):]:        ### FIXED A BUG HERE
+            for char in line[idx + len(opener):]:
                 if char == '(':
                     return name
                 name += char
@@ -142,15 +141,12 @@ def paren_parse(line: str) -> str:
 
 
 def equal_sign_parse(line: str) -> str:
-    '''This method parses a string for any single equal sign.
-    Once an equal sign is found it gets the first name before the 
-    equal sign. See DOCS/icebrakes.txt for more info.'''
+    '''This method parses a string for any single equal sign
+    and gets the first name before the equal sign.'''
     name: str = ''
     idx:int = 0
     def name_assembler(name: str='', idx: int=0) -> str:
         for char in line[:idx]:
-
-            # Massive BUG fix here.                   ### NEW
             name_chars = list(string.ascii_lowercase + string.ascii_uppercase + string.digits + '_')
             if char not in name_chars:
                 break
@@ -182,15 +178,14 @@ def cross_reference(constants: DictStrSet, all_vars: DictStrSet, states: States)
 
     for key, values in constants.items():
         for val in values:
-
-            set_of_line_numbers = all_vars.get(key)
+            set_of_line_numbers: Set = all_vars.get(key, set())
 
             if set_of_line_numbers is not None:
                 for num in set_of_line_numbers:
                     if num == val:
                         continue
 
-                    name = name_split(key)              ### NEW
+                    name = name_split(key)
                     mes=f'Bad use {name} was made static on line {val}, and mutated on line {num}'
                     print(mes)
                     states.errors = True
@@ -198,24 +193,13 @@ def cross_reference(constants: DictStrSet, all_vars: DictStrSet, states: States)
     if not states.errors:
         print('Congrats you passed the IceBrakes lint with a perfect 300/300 score!')
 
-    # This could be a return statement if we won't want to sys.exit on every call
+    # This will be a return statement for dirs
     sys.exit(int(states.errors))
 
 
 def white_space_parse(file: List[str]) -> int:
-    '''Takes a file, calculates the indentation level using magic.
-    For now we parse the first 100 lines of the file as that should be more than enough,
-    but that number can probably be reduced a bit. It doesn't start counting until white
-    space is found which ignores imports/doc strings in the line count.
-
-    Also we are considering tabs as whitespace but there will be more work to process them
-    later (aka you are a monster if your file has tabs in it), and also it's gonna be a mess 
-    if you mix whitespace/tabs. So IceBrakes is going to assume some level of responsibility 
-    belongs with the dev.
-    
-    I was kind of surprised I couldn't find a package or tool to do this since python is all about
-    indentation levels but it turned out to be a really easy solve. 
-    '''
+    '''Takes a file and calculates how many spaces that file uses to indent by parsing
+    the first 100 indented lines of the file.'''
 
     levels: Set = set()
     num: int = 0
@@ -226,7 +210,6 @@ def white_space_parse(file: List[str]) -> int:
             len_line_lstrip = len(line.lstrip())
 
             # This removes any lines that only have whitespace on them
-            # Of course so should your other linter but you know.
             if len_line_lstrip > 0:
                 num += 1
                 size = len(line) - len_line_lstrip

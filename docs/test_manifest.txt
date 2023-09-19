@@ -50,10 +50,8 @@ Still need support for := operator because it is usually prefaced by something l
 Checks that IceBrakes ignores comments (# only)
 0014
 First scope test.
-0015 ****
+0015
 More in depth scope test.
-0016 ****
-Very elaborate scope test.
 
 
 1000 **

@@ -1,1 +1,3 @@
-test_0015.py is not a file. No linting possible.
+Bad use car was made static on line 11, and mutated on line 14
+Bad use dar was made static on line 19, and mutated on line 23
+Bad use car was made static on line 27, and mutated on line 30

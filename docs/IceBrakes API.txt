@@ -1,63 +1,82 @@
-# THIS DOCUMENT MIGHT BE OUTDATED SINCE THE LAST CHANGES!!!!
-# Double check the function params and returns. At least a few have changed.
-
-This document contains all the functions and their apis from icebreaks.py,
-if you can think of a question this doc does not answer then please submit 
-a DOCS pull request.
-
-EXIT CODES
-0: Lint passed
-1: Lint failed.
-2: No immutables declared.
-
-It turned out to be pretty complicated adding exit code three because
-some lines might trigger EC3 and some might trigger EC1. So now any failures
-result in EC1 and EC2 is still used for when a lint isn't run at all.
-3: Immutable declared on a line but not defined.
+This document contains all the globals, classes, functions and their apis from icebreaks.py.
 
 
-GLOBALS
+### GLOBALS ###
 
 *** DictStrSet = Dict[str, set]
-    DictStrSet is a type aliases because the type hint Dict[str, set] occurs a lot in IceBrakes
-    while it unlikely for that type to change it is better to be able to change it once at the top
-    of the file. This has proven hand as I changed the internal API.
+    DictStrSet is a type aliases because the type hint Dict[str, set] occurs a lot in IceBrakes.
 
 
-CLASSES 
+### CLASSES ### 
 
-*** States():
+States
+This is a bit of a catchall class it handles global state bools, as well as namespace scoping tools.
+    
+    *PROPERTIES*
 
-    States.errors is used to track whether the lint failed or passed. And helps with the error codes too.
+    errors: bool = False
+        States.errors is used to track whether the lint failed or passed. And helps with the error codes too.
 
+    indent: int = 0
+        Tracks the current indentation level of the file.
 
-FUNCTIONS
+    old_indent: int = -999
+        The previous indentation level which is needed for changing scopes.
 
-*** icebrakes(filepath: str) -> None
-    The main function of IceBrakes takes a single argument filepath is a string that points to
-    a file, assuming filepath is a file, then this function begins linting the file by collecting 
-    all named assignments and any references to const variables (#$). Then it runs cross_reference 
-    on them which is detailed further down this file.
+    names_in_scope = [('root', 0)]
+        The list tracks the current scope relative to the root of the file and is how we build the custom dict keys that implement scope tracking.
 
-
-*** get_names_from_file(file: List[str], target='') -> dict
-
-    This function checks every line of a file and grabs the anything identified as a name
-    from those lines. If a target is declared this function checks the last chars of the line
-    for the target.
-
-    This can probably be optimized but the logic isn't really going to change. If I add full dir 
-    support then this method will be called on every py file in a dir. Error handling would be good too.
-
-    get_names_from_file also houses a subfunction called get_names_from_line which is run on every
-    line of the file.
-
-    (support for single line multi name assignments coming soon)
+    dir_mode: bool = False           # NOT WRITTEN YET
+        This bool tracks wether we are parsing a single file or a directory. 
 
 
-*** paren_parse(line: str) -> str
+    *METHODS*
 
-    paren_parse searches a line for one of these openers ['async def', 'def', 'class'] 
+    update_indent(self, indent: int) -> None
+        This method updates the indent level and when the indent level
+        goes down it leaves the current scope.
+
+
+### FUNCTIONS ###
+
+file_or_dir(argv[1]) -> None         # NOT WRITTEN YET
+    check if argv[1] is a file or dir. Then calls calls icebrakes below accordingly.
+
+
+icebrakes(filepath: str) -> None
+
+    This function takes a python file and lints it.
+
+
+get_names_from_file(file: List[str], states: States) -> Tuple[dict, dict] 
+
+    This function parses a python file for any names declared and builds two dictionaries.
+    One dict is for all_vars in the file and one dict is only for constants. Constants are 
+    defined as vars declared on a line ending in #$. 
+
+    There is a subfunction called get_names_from_line() which is run on nonempty/noncomment
+    lines of the file and actually grabs the names using paren_parse() and equal_sign_parse().
+
+    When paren_parse() returns a nonempty string get_names_from_line() adds a new entry to
+    States.names_in_scope to keep track of the new namespace we are in.
+
+    Once per line of the file get_names_from_file() also calls States.update_indent() to change
+    the current, and past indent vars and to leave the scope when indent decreases.
+
+
+name_gen(name: str, states: States) -> str
+
+    Create unique keys for the all_vars/constants dicts using names_in_scope to create a key.
+
+
+name_split(name: str) -> str
+
+    Gets all chars to the right of the last period in a string.
+
+
+paren_parse(line: str) -> str
+
+    Searches a line for one of these openers ['async def ', 'def' , 'class '] 
     and if an opener is found then the string between the opener and "(" is returned.
 
     This captures var names on lines like: 
@@ -66,21 +85,46 @@ FUNCTIONS
     async def name():
 
 
-*** equal_sign_parse equal_sign_parse(line: str) -> str
+equal_sign_parse equal_sign_parse(line: str) -> str
 
-    This method parses a string for any single equal sign.
-    Once an equal sign is found it gets the first name before the 
-    equal sign. 
+    This method parses a string for any single equal sign
+    and gets the first name before the equal sign. 
     
-    I also added support for other kinds of assignment like +=, *=, :=. 
+    I also added support for other kinds of assignment like +=, *=, /=. The
+    dreaded and ugly := operator is not yet supported because it's weird.
 
-    I made ALL_MODE global so it isn't passed around so much. 
+    There is currently a BUG where IceBrakes doesn't know about strings yet.
+    
+        'x = 45' 
 
-    There types of assignment are currently supported.
-    x: DictIntStr = {45, '45'}
-    x=45, x =45, x= 45 ...etc.
+    Would create the name 'x which is not desirable. This will be addressed urgently.
 
 
-*** cross_reference(constants, all_vars) -> None
+cross_reference(constants: DictStrSet, all_vars: DictStrSet, states: States) -> None:
 
     Once you have the constants and all_vars for a given python file you can cross reference them to see if any constants are overwritten illegally and inform the users. This is the main interface our users will interact with.
+
+
+white_space_parse(file: List[str]) -> int
+
+    Takes a file and calculates how many spaces that file uses to indent by parsing
+    the first 100 indented lines of the file.
+
+    We are considering tabs as whitespace but I haven't written the code to calculate how many
+    tabs a user is using for one indent. I mostly don't care about tabs to be honest so while
+    this will only be a few lines of code, it's not very urgent.
+
+    IceBrakes is not intended to replace your regular linting and if there are major white space
+    errors IceBrakes may have unexpected output.
+
+
+### EXIT CODES ###
+
+    0: Lint passed
+    1: Lint failed.
+    2: No immutables declared.
+
+    It turned out to be pretty complicated adding exit code three because
+    some lines might trigger EC3 and some might trigger EC1. So now any failures
+    result in EC1 and EC2 is still used for when a lint isn't run at all.
+    3: Immutable declared on a line but not defined.
