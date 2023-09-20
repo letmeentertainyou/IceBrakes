@@ -18,7 +18,6 @@ from typing import Dict, List, Tuple, Set
 DictStrSet = Dict[str, set]
 
 
-
 @dataclass
 class States():
     '''This is a bit of a catchall class it handles global state bools, as well
@@ -74,7 +73,7 @@ def icebrakes(filepath: str, dir_mode: bool= False) -> int:
     # This message will persist but the exit code is going away.
     if not constants and not states.errors:
         print('No constants declared, use #$ at then end of a line with a declaration.')
-        states.errors = True
+        states.errors = True    # This replaced sys.exit(2) and made my tests pass  ### NEW
 
     exit_code: int = cross_reference(constants, all_vars, states=states) # NEWISH
 
@@ -121,7 +120,7 @@ def get_names_from_file(file: List[str], states: States) -> Tuple[dict, dict]:
 
         const_declared: bool = False
 
-        if line.rstrip().endswith('#$'):
+        if line.rstrip().endswith('#$'):    ### New trick back ported to here
             const_declared = True
 
         name: str = get_name_from_line(line, indent)
@@ -195,10 +194,11 @@ def equal_sign_parse(line: str) -> str:
     return name
 
 
+# NEW RETURN TYPE: INT
 def cross_reference(constants: DictStrSet, all_vars: DictStrSet, states: States) -> int:
     '''Once you have the constants and all_vars for a given python file you 
     can cross reference them to see if any constants are overwritten illegally 
-    and inform the users.'''
+    and inform the users. The exit status is returned as an int.'''
 
     for key, values in constants.items():
         for val in values:
