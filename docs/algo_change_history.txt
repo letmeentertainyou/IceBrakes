@@ -229,9 +229,6 @@ user    0m1.713s
 sys     0m0.114s
 
 
-
-
-
 *Directory support
 
     IceBrakes should run with either a file or a dir of files as input. I will add
@@ -251,6 +248,14 @@ sys     0m0.114s
 
     My original plan for this was a bit convoluted but os.walk saved the day and I
     don't need to document it further because the code is very self explanatory.
+
+AFTER TIMES:
+real    0m10.014s
+user    0m2.706s
+sys     0m1.421s
+
+A little bit of a regression but I added a lot of complexity in the last few updates
+so that makes sense.
 
 
 Copyright © 2023 Lars S.
