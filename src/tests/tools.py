@@ -6,13 +6,14 @@ TESTING_README.txt for much more info about tools.py .
 
 I HAVE CHOSEN TO HAVE THIS FILE INCLUDED IN THE COVERAGE REPORT
 WHICH MEANS WE HAVE TO WRITE TESTS TO TEST THE TEST TOOLS.'''
+
 from os import listdir, system
 from os.path import isfile
 from pathlib import PosixPath
+from subprocess import run
 from sys import argv
 from time import strftime
 from typing import List
-from subprocess import run
 
 import pytest  # pylint: disable=unused-import
 
@@ -24,14 +25,17 @@ MAIN: PosixPath = PosixPath(TESTS).joinpath('../../icebrakes.py').resolve()
 def parse_argv(args: List[str]) -> None:
     '''parses the command line inputs see DOCS/TESTING_README.txt for a full 
     write up of the available command line args.'''
+
     tot: int = len(args)
     if tot < 1 or tot > 4:
         print('tools.py only takes one or two args. Read the TESTING_README for me.')
 
     mode: str = args[1]
     if tot == 2:
+
         if mode == '-a':
             gen_output_for_all_test_0()
+
         else:
             test_file = int_to_filepath(args[1])
             if isfile(f'{TESTS}/_{test_file}'):
@@ -46,6 +50,7 @@ def parse_argv(args: List[str]) -> None:
             test_name = int_to_filepath(num)
             _test_file = f'{TESTS}/_{test_name}'
             test_file = f'{TESTS}/{test_name}'
+
             if not isfile(_test_file) and not isfile(test_file):
                 system(f'cp {TESTS}/../template.py {_test_file}')    # BUG FIX
                 system(f"sed -i 's/test_number/{num}/g' {_test_file}")
@@ -53,6 +58,7 @@ def parse_argv(args: List[str]) -> None:
 
             else:
                 print(f'{test_name} already exists, please delete it first.')
+
 
 def cleanup() -> None:
     '''Removes all the txt files in src/tests/data/tmp '''
@@ -63,10 +69,13 @@ def filecmp(path_1: str, path_2: str) -> bool:
     '''This is named after the python builtin filecmp.cmp but my 
     version only checks if the lines of the two files are the 
     same and not the metadata.'''
+
     with open(path_1, 'r', encoding = 'utf-8') as filehandler:
         file_1: List[str] = filehandler.readlines()
+
     with open(path_2, 'r', encoding = 'utf-8') as filehandler:
         file_2: List[str] = filehandler.readlines()
+
     if file_1 == file_2:
         return True
     return False
@@ -85,6 +94,7 @@ def pytest_runner(num: str, get_code: bool=False) -> int:
     and sends the given output to a tmp file. A test should never be written
     with an invalid input file because the test_###.py files are 
     the test input themselves.'''
+
     test_file = int_to_filepath(str(num))
     filename: str = test_file[:-3]    # the -3 removes ".py" from the filename
 
@@ -103,15 +113,18 @@ def pytest_runner(num: str, get_code: bool=False) -> int:
     assert isfile(f'{DATA}/tmp/{filename}.txt')
     assert filecmp(f'{DATA}/perm/{filename}.txt', f'{DATA}/tmp/{filename}.txt')
 
-    return 9999     # This number won't conflict with the existing exit codes.
+    return -1   # This number won't conflict with the existing exit codes.
+
 
 def gen_output_for_all_test_0()-> None:
     '''Output data will be generated for every test with a number
     starting with zero (test_0###.py) . This could overwrite valid data with
     invalid data so make sure to only use this function when
     every test is passing!'''
+
     time_in_mins = strftime("%Y%m%d-%H%M")
     backup_dir = f'{DATA}/relegated/{time_in_mins}'
+
     system(f'cp -r {DATA}/perm/ {backup_dir}')
     system(f'rm {DATA}/perm/test_0*.txt')
 

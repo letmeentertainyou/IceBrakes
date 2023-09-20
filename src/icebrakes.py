@@ -22,6 +22,7 @@ DictStrSet = Dict[str, set]
 class States():
     '''This is a bit of a catchall class it handles global state bools, as well
     as namespace scoping tools.'''
+
     errors: bool = False
     indent: int = 0
     old_indent: int = -1
@@ -33,21 +34,24 @@ class States():
     def update_indent(self, indent: int) -> None:
         '''This method updates the indent level and when the indent level
         goes down it leaves the current scope.'''
+
         self.old_indent = self.indent
         self.indent = indent
 
         if self.indent < self.names_in_scope[-1][1]:
-            # This takes us up one level of scope
-            self.names_in_scope.pop()
+            self.names_in_scope.pop()        # This takes us up one level of scope
 
 
 def dir_or_file(path: str) -> None:           ### NEW
     '''Takes an input string and if it's a dir recursively lints it,
     and if it's a file lints it, and otherwise prints an error message.'''
+
     if isdir(path):
         exit_codes: List[int] = []
+
         for fullpath, subdirs, files in walk(path):         # pylint: disable=unused-variable
             for file in files:
+
                 if file.endswith(".py") is True:
                     code = icebrakes(f"{fullpath}/{file}", dir_mode=True)
                     exit_codes.append(code)
@@ -95,7 +99,8 @@ def get_names_from_file(file: List[str], states: States) -> Tuple[dict, dict]:
 
         line = line.lstrip()
         name: str = paren_parse(line)
-        if name:                         # This is a tuple
+        if name:
+                                         # This is a tuple
             states.names_in_scope.append((name, indent +1))
             return name
 
@@ -114,20 +119,19 @@ def get_names_from_file(file: List[str], states: States) -> Tuple[dict, dict]:
         if len_line_lstrip == 0 or line_lstrip[0] == '#':
             continue
 
+        const_declared: bool = False
         spaces: int = len(line) - len_line_lstrip
         indent: int = spaces // base_indent
         states.update_indent(indent)
-
-        const_declared: bool = False
 
         if line.rstrip().endswith('#$'):    ### New trick back ported to here
             const_declared = True
 
         name: str = get_name_from_line(line, indent)
-
         if name:
             name = name_gen(name, states)
             all_vars.setdefault(name, set()).add(index + 1)
+
             if const_declared:
                 constants.setdefault(name, set()).add(index + 1)
 
@@ -202,9 +206,10 @@ def cross_reference(constants: DictStrSet, all_vars: DictStrSet, states: States)
 
     for key, values in constants.items():
         for val in values:
-            set_of_line_numbers: Set = all_vars.get(key, set())
 
+            set_of_line_numbers: Set = all_vars.get(key, set())
             if set_of_line_numbers is not None:
+
                 for num in set_of_line_numbers:
                     if num == val:
                         continue
@@ -226,9 +231,11 @@ def white_space_parse(file: List[str]) -> int:
 
     levels: Set = set()
     num: int = 0
+
     for line in file:
         if num == 100:
             break
+
         if line[0] in "\t ":
             len_line_lstrip = len(line.lstrip())
 
@@ -237,18 +244,17 @@ def white_space_parse(file: List[str]) -> int:
                 num += 1
                 size = len(line) - len_line_lstrip
                 levels.add(size)
-    if levels:
-        # int here is also for mypy
-        return int(reduce(gcd, levels))
 
-    # This is just for mypy/pylint
-    return 1
+    if levels:
+        return int(reduce(gcd, levels)) # int() here is for mypy.
+
+    return 1 # This explicit return is just for mypy/pylint
 
 
 if __name__ == '__main__':
     if len(sys.argv) == 2:
         dir_or_file(sys.argv[1])         ### NEW
-        #icebrakes(sys.argv[1])
+
     else:
         print('This project takes exactly 1 command line arg, a python file path.')
 
