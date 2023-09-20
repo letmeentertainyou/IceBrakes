@@ -1,4 +1,4 @@
-version=0.1.3
+version=0.1.5
 
 *** Using IceBrakes ***
 
@@ -7,7 +7,10 @@ Make sure icebrakes.py is executable (use chmod if it isn't)
 To run IceBrakes linting on your file simple run 
 $ ./icebrakes.py path/to/your/file.py
 
-Or you can install IceBrakes with the following command
+IceBrakes also supports directories as input and will recursively lint
+every python file in a given directory.
+
+You can install IceBrakes with the following command
 $ sudo cp icebrakes.py /usr/local/bin/icebrakes
 
 If you are interested in diving into the code or using IceBrakes as a module

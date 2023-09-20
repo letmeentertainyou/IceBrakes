@@ -39,13 +39,16 @@ This is a bit of a catchall class it handles global state bools, as well as name
 
 ### FUNCTIONS ###
 
-file_or_dir(argv[1]) -> None         # NOT WRITTEN YET
-    check if argv[1] is a file or dir. Then calls calls icebrakes below accordingly.
+file_or_dir(path: str) -> None       # RENAME
+    Takes an input string and if it's a dir recursively lints it,
+    and if it's a file lints it, and otherwise prints an error message.
+    
+    This one function is all we needed for dir support.
 
 
-icebrakes(filepath: str) -> None
+icebrakes(filepath: str, dir_mode: bool=False) -> int
 
-    This function takes a python file and lints it.
+    This function takes a python file and lints it. Returns an integer exit code.
 
 
 get_names_from_file(file: List[str], states: States) -> Tuple[dict, dict] 
@@ -122,6 +125,8 @@ white_space_parse(file: List[str]) -> int
 
     0: Lint passed
     1: Lint failed.
+
+    Exit code 2 was relegated for directory support.
     2: No immutables declared.
 
     It turned out to be pretty complicated adding exit code three because

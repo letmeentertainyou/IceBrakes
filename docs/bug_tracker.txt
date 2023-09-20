@@ -25,3 +25,16 @@ users.
 Untested because I couldn't recreate. This is a good example of how I should focus on
 testing as soon as I discover bugs so that I know where they truly come from. We should continue
 to track bugs even if they can't be recreated.
+
+Stayed up too late to think last night, now I understand bug 2000. I was originally only concerned
+with skipping empty lines and so I checked if the line equaled a single newline character.
+
+But what if a line is this '\n   '? Then we have an undiagnosed white space error. Once testing is
+written the new bugfix will be this.
+
+Final code:
+if len_line_lstrip == 0 or line_lstrip[0] == '#':
+    continue
+
+I was on the right line of thinking when it came to the bug fix, but now I will have a more documented
+understanding of my original failing. 

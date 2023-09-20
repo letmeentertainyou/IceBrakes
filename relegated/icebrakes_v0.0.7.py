@@ -1,5 +1,6 @@
 #!/bin/python3
-'''Run main.py with the path to a python file as the only argument. 
+'''v0.0.7
+Run main.py with the path to a python file as the only argument. 
 Support for dirs will be added in the future. 
 
 Minimum supported python version is 3.8.x (subject to change'''

@@ -1,5 +1,6 @@
 #!/bin/python3
-'''Run main.py with the path to a python file as the only argument. 
+'''v0.1.3
+Run main.py with the path to a python file as the only argument. 
 Support for dirs will be added in the future. 
 
 Minimum supported python version is 3.8.x (subject to change'''
@@ -88,7 +89,8 @@ def get_names_from_file(file: List[str], states: States) -> Tuple[dict, dict]:
         line_lstrip: str = line.lstrip()
         len_line_lstrip: int = len(line_lstrip)
 
-        if line == '\n' or len_line_lstrip == 0 or line_lstrip[0] == '#':
+        #BUG FIX 2000
+        if len_line_lstrip == 0 or line_lstrip[0] == '#':
             continue
 
         spaces: int = len(line) - len_line_lstrip

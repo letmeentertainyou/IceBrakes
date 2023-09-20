@@ -1,0 +1,37 @@
+Congrats you passed the IceBrakes lint with a perfect 300/300 score!
+Congrats you passed the IceBrakes lint with a perfect 300/300 score!
+Congrats you passed the IceBrakes lint with a perfect 300/300 score!
+Bad use BAR was made static on line 14, and mutated on line 15
+Bad use BAR was made static on line 14, and mutated on line 16
+Bad use BAR was made static on line 14, and mutated on line 17
+Bad use BAR was made static on line 14, and mutated on line 18
+Bad use BAR was made static on line 14, and mutated on line 19
+Bad use BAR was made static on line 14, and mutated on line 20
+Bad use BAR was made static on line 15, and mutated on line 14
+Bad use BAR was made static on line 15, and mutated on line 16
+Bad use BAR was made static on line 15, and mutated on line 17
+Bad use BAR was made static on line 15, and mutated on line 18
+Bad use BAR was made static on line 15, and mutated on line 19
+Bad use BAR was made static on line 15, and mutated on line 20
+Bad use FOO was made static on line 13, and mutated on line 10
+Immutable var declared on line number 10, but no names found.
+Congrats you passed the IceBrakes lint with a perfect 300/300 score!
+Congrats you passed the IceBrakes lint with a perfect 300/300 score!
+Bad use BAR was made static on line 7, and mutated on line 12
+Bad use CAR was made static on line 8, and mutated on line 13
+No constants declared, use #$ at then end of a line with a declaration.
+Bad use BAR was made static on line 9, and mutated on line 10
+Bad use bar was made static on line 14, and mutated on line 18
+Congrats you passed the IceBrakes lint with a perfect 300/300 score!
+Congrats you passed the IceBrakes lint with a perfect 300/300 score!
+No constants declared, use #$ at then end of a line with a declaration.
+No constants declared, use #$ at then end of a line with a declaration.
+No constants declared, use #$ at then end of a line with a declaration.
+No constants declared, use #$ at then end of a line with a declaration.
+Bad use car was made static on line 11, and mutated on line 14
+Bad use dar was made static on line 19, and mutated on line 23
+Bad use car was made static on line 27, and mutated on line 30
+No constants declared, use #$ at then end of a line with a declaration.
+No constants declared, use #$ at then end of a line with a declaration.
+No constants declared, use #$ at then end of a line with a declaration.
+[0, 0, 0, 1, 1, 1, 0, 0, 1, 1, 1, 1, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1]

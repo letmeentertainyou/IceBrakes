@@ -69,7 +69,13 @@ Use pytest_runner and existing test files to capture and test the expected exit 
 1002
 This is the same as test 0 but with an invalid filename. To test the invalid file name case. 
 This test is a bit weird because it requires an invalid name so it actually tries to lint 
-test_0###.py which doesn't exist. 
+test_####.py which doesn't exist.  This test was rewritten in v0.1.5 and it now demonstrates
+how some of the globals in tools.py can be used to build your own test from scratch.
+
+1003
+This should lint the entire testing dir to one massive file, I'm not going to manually
+check the accuracy of this test but the point is mostly just that the output shouldn't
+be changed by new code.
 
 
 #### BUG FIX TESTS ####

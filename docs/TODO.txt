@@ -1,24 +1,6 @@
 # MISSING FEATURES
 Implement tests #5-10 and #12 (detailed bellow)
 
-    *Directory support
-
-        IceBrakes should run with either a file or a dir of files as input. I will add
-        a bool to get_names_from_file() that tracks when a dir is being parsed. When
-        in dir_more we return an exit code instead of exiting with that code. Here is an
-        example of the code.
-
-        def get_names_from_file(file: str, dir_mode: bool=False) -> int:
-            exit_code: int = 0
-            if dir_mode:
-                return exit_code
-            else:
-                exit(exit_code)
-
-        Then the dir function just collects all the exit codes and prints them all
-        for now. This won't break a single unit test or the API.
-
-
     * Loop awareness
 
         This is not too different from parsing def/class etc. Basically the rule is just
@@ -99,6 +81,6 @@ Outlines written in TODO.txt
 Cleaned up icebrakes.py with some minor performance tweaks.
 Overhauled docs/IceBrakes API.txt
 Added bug testing policy
-
+Added recursive directory support and test 1003 for directories.
 
 Copyright © 2023 Lars S.

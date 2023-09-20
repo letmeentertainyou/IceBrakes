@@ -1,5 +1,6 @@
 #!/bin/python3
-'''Run main.py with the path to a python file as the only argument. 
+'''v0.1.5
+Run main.py with the path to a python file as the only argument. 
 Support for dirs will be added in the future. 
 
 Minimum supported python version is 3.8.x (subject to change'''
@@ -10,10 +11,12 @@ import sys
 from dataclasses import dataclass
 from functools import reduce
 from math import gcd
-from os.path import isfile
+from os import walk
+from os.path import isdir, isfile
 from typing import Dict, List, Tuple, Set
 
 DictStrSet = Dict[str, set]
+
 
 
 @dataclass
@@ -22,7 +25,7 @@ class States():
     as namespace scoping tools.'''
     errors: bool = False
     indent: int = 0
-    old_indent: int = -999
+    old_indent: int = -1
 
     def __post_init__(self) -> None:
         '''Dataclasses can't have lists as properties so this post_init is required.'''
@@ -39,26 +42,46 @@ class States():
             self.names_in_scope.pop()
 
 
-def icebrakes(filepath: str) -> None:
+def dir_or_file(path: str) -> None:           ### NEW
+    '''Takes an input string and if it's a dir recursively lints it,
+    and if it's a file lints it, and otherwise prints an error message.'''
+    if isdir(path):
+        exit_codes: List[int] = []
+        for fullpath, subdirs, files in walk(path):         # pylint: disable=unused-variable
+            for file in files:
+                if file.endswith(".py") is True:
+                    code = icebrakes(f"{fullpath}/{file}", dir_mode=True)
+                    exit_codes.append(code)
+        print(exit_codes)
+
+    elif isfile(path):
+        icebrakes(path)
+
+    else:
+        print(f'{path.split("/")[-1]} is not a file or directory. No linting possible.')
+
+
+def icebrakes(filepath: str, dir_mode: bool= False) -> int:
     '''This function takes a python file and lints it.'''
 
     states = States()
 
-    # These file checks/messages will be removed from this function soon.
-    if isfile(filepath):
-        with open(filepath, 'r', encoding='utf-8') as filehandler:
-            file: List[str] = filehandler.readlines()
+    with open(filepath, 'r', encoding='utf-8') as filehandler:
+        file: List[str] = filehandler.readlines()
 
-        constants, all_vars = get_names_from_file(file, states=states)
+    constants, all_vars = get_names_from_file(file, states=states)
 
-        # I tried to to remove that states.errors check and broke everything.
-        if not constants and not states.errors:
-            print('No constants declared, use #$ at then end of a line with a declaration.')
-            sys.exit(2)
+    # This message will persist but the exit code is going away.
+    if not constants and not states.errors:
+        print('No constants declared, use #$ at then end of a line with a declaration.')
+        states.errors = True
 
-        cross_reference(constants, all_vars, states=states)
-    else:
-        print(f'{filepath.rsplit("/")[-1]} is not a file. No linting possible.')
+    exit_code: int = cross_reference(constants, all_vars, states=states) # NEWISH
+
+    if not dir_mode:              ### NEW
+        sys.exit(exit_code)       ### NEW
+    return exit_code              ### NEW
+
 
 
 def get_names_from_file(file: List[str], states: States) -> Tuple[dict, dict]:
@@ -88,7 +111,8 @@ def get_names_from_file(file: List[str], states: States) -> Tuple[dict, dict]:
         line_lstrip: str = line.lstrip()
         len_line_lstrip: int = len(line_lstrip)
 
-        if line == '\n' or len_line_lstrip == 0 or line_lstrip[0] == '#':
+        #BUG FIX 2000
+        if len_line_lstrip == 0 or line_lstrip[0] == '#':
             continue
 
         spaces: int = len(line) - len_line_lstrip
@@ -97,7 +121,7 @@ def get_names_from_file(file: List[str], states: States) -> Tuple[dict, dict]:
 
         const_declared: bool = False
 
-        if '#$' in line.rstrip()[-2:]:
+        if line.rstrip().endswith('#$'):
             const_declared = True
 
         name: str = get_name_from_line(line, indent)
@@ -171,7 +195,7 @@ def equal_sign_parse(line: str) -> str:
     return name
 
 
-def cross_reference(constants: DictStrSet, all_vars: DictStrSet, states: States) -> None:
+def cross_reference(constants: DictStrSet, all_vars: DictStrSet, states: States) -> int:
     '''Once you have the constants and all_vars for a given python file you 
     can cross reference them to see if any constants are overwritten illegally 
     and inform the users.'''
@@ -193,8 +217,7 @@ def cross_reference(constants: DictStrSet, all_vars: DictStrSet, states: States)
     if not states.errors:
         print('Congrats you passed the IceBrakes lint with a perfect 300/300 score!')
 
-    # This will be a return statement for dirs
-    sys.exit(int(states.errors))
+    return int(states.errors)          ### NEW
 
 
 def white_space_parse(file: List[str]) -> int:
@@ -224,6 +247,10 @@ def white_space_parse(file: List[str]) -> int:
 
 if __name__ == '__main__':
     if len(sys.argv) == 2:
-        icebrakes(sys.argv[1])
+        dir_or_file(sys.argv[1])         ### NEW
+        #icebrakes(sys.argv[1])
     else:
         print('This project takes exactly 1 command line arg, a python file path.')
+
+
+#Copyright © 2023 Lars S.

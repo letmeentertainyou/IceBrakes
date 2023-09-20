@@ -227,3 +227,30 @@ AFTER TIMES:
 real    0m1.834s
 user    0m1.713s
 sys     0m0.114s
+
+
+
+
+
+*Directory support
+
+    IceBrakes should run with either a file or a dir of files as input. I will add
+    a bool to get_names_from_file() that tracks when a dir is being parsed. When
+    in dir_more we return an exit code instead of exiting with that code. Here is an
+    example of the code.
+
+    def get_names_from_file(file: str, dir_mode: bool=False) -> int:
+        exit_code: int = 0
+        if dir_mode:
+            return exit_code
+        else:
+            exit(exit_code)
+
+    Then the dir function just collects all the exit codes and prints them all
+    for now. This won't break a single unit test or the API.
+
+    My original plan for this was a bit convoluted but os.walk saved the day and I
+    don't need to document it further because the code is very self explanatory.
+
+
+Copyright © 2023 Lars S.
