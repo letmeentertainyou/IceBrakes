@@ -21,8 +21,19 @@ Implement tests #5-10 and #12 (detailed bellow)
         so there isn't really a shortcut here.
 
 
-    * Assigning a shallow copy to a new name which causes mutation
+   *  String awareness (ignore parsed words in quotes)
+        
+        I have a more detailed writeup of my approach plan in strings.py, writing the multiline
+        string parser will be the first step to address most of the below tasks. Multiline and 
+        line's ending in \' need the same multiline engine but with different criteria.
 
+        I can write the multiline engine for any of the below work too and backport it to strings
+        if I feel more motivated to move that direction. I am enjoying building this project out
+        in such a modular way because it's pretty easy to expand so far.
+
+
+    * Assigning a shallow copy to a new name which causes mutation
+        
         I don't think this will be too tricky but it's gonna have a lot of processing overhead
         because before I only cared about name assignments that matched the constants dict and
         after this change I will need to track the values assigned to all names in the file to
@@ -34,12 +45,20 @@ Implement tests #5-10 and #12 (detailed bellow)
 
         I just remembered this is legal in python and I have no clue how to parse for it.
 
-        bar: List = [1,
-                     2,
-                     3,
-                     4 ]
+            bar: List = [1,
+                        2,
+                        3,
+                        4 ]
 
         This relates heavily to the topic of shallow copies but it affects all assignments.
+        We will basically need to build another dict containing all values that get assigned
+        to the right of an equal sign. This will be part of equal_sign_parse and not too much
+        new code but it is an entire new dict to keep track of, a bit messy.
+
+            foo     #$
+            bar = foo
+
+        That would be always illegal in the simplest approach.
 
 
     * Lines that end in '\' awareness
@@ -47,20 +66,17 @@ Implement tests #5-10 and #12 (detailed bellow)
         I haven't really thought about this one yet because I think it's going to change a lot
         of my algorithm, I'm not really sure how to approach it. I suppose another boolean in
         States() to track if we are on a multiline is a good start. 
-        
-
-   *  String awareness (ignore parsed words in quotes)
-        
-        This may be my first real use case for regex, I honestly don't know how to
-        approach this problem yet but I will think about it after a few more features/docs 
-        are done.
 
 
     * Multi value assignments (tuple expansion)
 
         This might take regex too, this one seems the most complicated to me but I just
         need to notate all the edge cases for the comma character in python and then make
-        a plan.
+        a plan. 
+        
+        The comma parsing engine I will have to build is also potentially part of the new right
+        hand of the equal sign dict that I need to start building. I may begin by outlining how 
+        the above four features will depend on each other's apis before actually writing the code. 
 
 
 # CHANGELOG
