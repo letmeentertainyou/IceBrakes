@@ -1,27 +1,13 @@
 # MISSING FEATURES
 Implement tests #5-10 and #12 (detailed bellow)
 
-    * Loop awareness
+    * Line Skip engine (v0.1.7)
 
-        This is not too different from parsing def/class etc. Basically the rule is just
-        "You can never assign an immutable in the body of a loop." So we only care about
-        loops when building the constants dict. This error is different because it's an 
-        illegal use of "#$" all together. We will give the message "Constant assigned 
-        inside of a loop on line ##, consider assigning outside of the loop instead."
-        
-        We also need a way to track whether or not we're in the body of a loop,
-        and I'm not sure of the fastest way to do that yet. The indentation level is already
-        being tracked so all we need is a like a "in loop" bool.
-
-        "break" statements are a weird edge case here because I'm not executing or following the
-        logic of the code, and I really can't think of a way a break statement would effect
-        immutable vars. Instead I'll be concerned only with whitespace for exiting loops. 
-
-        We have to track every single loop in order to know if "#$" is being used inside a loop
-        so there isn't really a shortcut here.
+        I'm going to build this before the features below. By itself this feature will not be
+        possible to enable. We will need cases to trigger this mode as defined below.
 
 
-   *  String awareness (ignore parsed words in quotes)
+    *  String awareness (ignore parsed words in quotes)
         
         I have a more detailed writeup of my approach plan in strings.py, writing the multiline
         string parser will be the first step to address most of the below tasks. Multiline and 
@@ -98,5 +84,7 @@ Cleaned up icebrakes.py with some minor performance tweaks.
 Overhauled docs/IceBrakes API.txt
 Added bug testing policy
 Added recursive directory support and test 1003 for directories.
+Added loop support and turned on tests 5 and 6.
+
 
 Copyright © 2023 Lars S.

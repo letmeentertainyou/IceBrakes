@@ -29,9 +29,9 @@ Mutating a variable on a line earlier than the line it's declared immutable on.
 No linting is declared in this test. Exit code 2
 0004
 #$ is used at the end of a line but not vars are declared on that line. Exit code 3.
-0005 *
+0005
 Declaring an immutable var inside a loop. This should be illegal.
-0006 *
+0006
 Define an immutable function inside while loop. 
 0007 *
 You can't assign a shallow copy of an immutable var because in python that 
@@ -79,7 +79,8 @@ be changed by new code.
 
 
 #### BUG FIX TESTS ####
-(currently empty)
+See docs/bug_tracker.txt for full documentation of bugs and their tests.
+2000
 
 
 #### FINAL TEST ####

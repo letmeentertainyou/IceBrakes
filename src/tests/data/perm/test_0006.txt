@@ -1,0 +1,2 @@
+Bad usage was ignored inside while loop on line 8.
+No constants declared, use #$ at then end of a line with a declaration.

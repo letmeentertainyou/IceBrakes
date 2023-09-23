@@ -1,5 +1,5 @@
 #!/bin/python3
-'''v0.1.7
+'''v0.1.5
 Run main.py with the path to a python file as the only argument. 
 Support for dirs will be added in the future. 
 
@@ -29,11 +29,7 @@ class States():
 
     def __post_init__(self) -> None:
         '''Dataclasses can't have lists as properties so this post_init is required.'''
-        # Should List[Tuple] = [('root', 0)] this be a defined data type? Will I use it
-        # a third time or has it been played out now?
         self.names_in_scope: List[Tuple] = [('root', 0)]
-        self.loops_in_scope: List[Tuple] = [('root', 0)]           # NEW
-
 
     def update_indent(self, indent: int) -> None:
         '''This method updates the indent level and when the indent level
@@ -42,12 +38,8 @@ class States():
         self.old_indent = self.indent
         self.indent = indent
 
-        # These checks take the scope up one layer at the correct time.
         if self.indent < self.names_in_scope[-1][1]:
-            self.names_in_scope.pop()
-
-        if self.indent < self.loops_in_scope[-1][1]:                # NEW
-            self.loops_in_scope.pop()                               # NEW
+            self.names_in_scope.pop()        # This takes us up one level of scope
 
 
 def dir_or_file(path: str) -> None:
@@ -82,9 +74,10 @@ def icebrakes(filepath: str, dir_mode: bool= False) -> int:
 
     constants, all_vars = get_names_from_file(file, states=states)
 
+
     if not constants and not states.errors:
         print('No constants declared, use #$ at then end of a line with a declaration.')
-        states.errors = True
+        states.errors = True    # This replaced sys.exit(2) and made my tests pass  ### NEW
 
     exit_code: int = cross_reference(constants, all_vars, states=states)
 
@@ -105,8 +98,8 @@ def get_names_from_file(file: List[str], states: States) -> Tuple[dict, dict]:
 
         line = line.lstrip()
         name: str = paren_parse(line)
-
         if name:
+                                         # This is a tuple
             states.names_in_scope.append((name, indent +1))
             return name
 
@@ -124,8 +117,6 @@ def get_names_from_file(file: List[str], states: States) -> Tuple[dict, dict]:
         if len_line_lstrip == 0 or line_lstrip[0] == '#':
             continue
 
-        loop_parse(line, states)        ### NEW
-
         const_declared: bool = False
         spaces: int = len(line) - len_line_lstrip
         indent: int = spaces // base_indent
@@ -140,12 +131,7 @@ def get_names_from_file(file: List[str], states: States) -> Tuple[dict, dict]:
             all_vars.setdefault(name, set()).add(index + 1)
 
             if const_declared:
-                if len(states.loops_in_scope) == 1:                                         ### NEW
-                    constants.setdefault(name, set()).add(index + 1)
-
-                else:                                                                       ### NEW
-                    loop_name = states.loops_in_scope[-1][0]                                ### NEW
-                    print(f'Bad usage was ignored inside {loop_name}loop on line {index +1}.') #NEW
+                constants.setdefault(name, set()).add(index + 1)
 
         elif const_declared:
             print(f'Immutable var declared on line number {index + 1}, but no names found.')
@@ -165,14 +151,6 @@ def name_split(name: str) -> str:
     return name.rsplit('.')[-1]
 
 
-def loop_parse(line: str, states: States) -> None:            ### NEW
-    '''Finds a loop in a given line and updates states. This function
-    will need string awareness when that is implemented.'''
-    for opener in ['for ', 'while ']:
-        if opener in line[0:len(opener)]:
-            states.loops_in_scope.append((opener, states.indent))
-
-
 def paren_parse(line: str) -> str:
     '''Searches a line for one of these openers ['async def', 'def', 'class'] 
     and if an opener is found then the string between the opener and "(" is returned.'''
@@ -190,18 +168,16 @@ def paren_parse(line: str) -> str:
 def equal_sign_parse(line: str) -> str:
     '''This method parses a string for any single equal sign
     and gets the first name before the equal sign.'''
-
+    name: str = ''
+    idx:int = 0
     def name_assembler(name: str='', idx: int=0) -> str:
-        '''Parses all chars that can be in a name and stops when an invalid char is found.'''
         for char in line[:idx]:
-            name_chars=list(string.ascii_lowercase + string.ascii_uppercase + string.digits + '_')
+            name_chars = list(string.ascii_lowercase + string.ascii_uppercase + string.digits + '_')
             if char not in name_chars:
                 break
             name += char
         return name
 
-    name: str = ''
-    idx:int = 0
 
     # FOUND A BUG WHEN LINTING THIS FILE, THESE EQUAL SIGNS ARE NOT
     # BEING IGNORED EVEN THOUGH THEY ARE STRINGS. STRING AWARENESS NEEDED.

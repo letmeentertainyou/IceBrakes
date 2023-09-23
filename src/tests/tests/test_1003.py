@@ -7,6 +7,8 @@ def test() -> None:
     '''This is the default test implementation, call a test with the number of your test.'''
 
     name: str = 'test_1003.txt'
+    # Uncomment this line to generate new test data *this is needed often)
+    #system(f'{MAIN} {TESTS} > {DATA}/perm/{name}')
     system(f'{MAIN} {TESTS} > {DATA}/tmp/{name}')
     assert isfile(f'{DATA}/perm/{name}')
     assert isfile(f'{DATA}/tmp/{name}')

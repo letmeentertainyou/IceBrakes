@@ -229,7 +229,7 @@ user    0m1.713s
 sys     0m0.114s
 
 
-*Directory support
+*Directory support (v0.1.5)
 
     IceBrakes should run with either a file or a dir of files as input. I will add
     a bool to get_names_from_file() that tracks when a dir is being parsed. When
@@ -256,6 +256,44 @@ sys     0m1.421s
 
 A little bit of a regression but I added a lot of complexity in the last few updates
 so that makes sense.
+
+
+* Loop awareness (v0.1.7)
+
+    This is not too different from parsing def/class etc. Basically the rule is just
+    "You can never assign an immutable in the body of a loop." So we only care about
+    loops when building the constants dict. This error is different because it's an 
+    illegal use of "#$" all together. We will give the message "Constant assigned 
+    inside of a loop on line ##, consider assigning outside of the loop instead."
+    
+    We also need a way to track whether or not we're in the body of a loop,
+    and I'm not sure of the fastest way to do that yet. The indentation level is already
+    being tracked so all we need is a like a "in loop" bool.
+
+    "break" statements are a weird edge case here because I'm not executing or following the
+    logic of the code, and I really can't think of a way a break statement would effect
+    immutable vars. Instead I'll be concerned only with whitespace for exiting loops. 
+
+    We have to track every single loop in order to know if "#$" is being used inside a loop
+    so there isn't really a shortcut here. 
+
+    I used the sample API inside of the States class that names_in_scope uses and I added
+    an instance variable called loops_in_scope. This change was achieved in exactly 12 new 
+    lines of code, and I guessed it would take 4-8 lines. Close enough!
+
+AFTER TIMES:
+real    0m0.621s
+user    0m0.298s
+sys     0m0.059s
+
+This is weird, I added complexity and got a near 10x time improvement. I reran v0.1.5
+and got the same times as above. I have no clue what caused such a speedup, but all the 
+tests are still passing so I'll take it.
+
+v0.1.5 TIMES
+real    0m9.546s
+user    0m2.582s
+sys     0m1.385s
 
 
 Copyright © 2023 Lars S.

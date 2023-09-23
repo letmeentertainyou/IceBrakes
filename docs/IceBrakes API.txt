@@ -77,6 +77,11 @@ name_split(name: str) -> str
     Gets all chars to the right of the last period in a string.
 
 
+loop_parse(line: str, states: States) -> None
+    Finds a loop in a given line and updates states. This function
+    will need string awareness when that is implemented.
+
+
 paren_parse(line: str) -> str
 
     Searches a line for one of these openers ['async def ', 'def' , 'class '] 
