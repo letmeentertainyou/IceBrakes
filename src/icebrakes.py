@@ -59,7 +59,8 @@ def dir_or_file(path: str) -> None:
             for file in files:
 
                 if file.endswith(".py") is True:
-                    print(f'Linting results for {file}:')
+                    # This print makes the dir mode output easier to read
+                    print(f'Linting results for {file}:')          ### NEW
                     code = icebrakes(f"{fullpath}/{file}", dir_mode=True)
                     exit_codes.append(code)
         print(exit_codes)
