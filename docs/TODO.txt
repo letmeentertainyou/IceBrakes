@@ -6,20 +6,20 @@ that happens. I will probably slow down development of IceBrakes around version 
 
 # MISSING FEATURES
 
-    * Multiline Comment Engine (v0.1.8)
-
-        Strings are complex enough that I will hand them in two steps. First I'm tackling
-        multi line strings which will be a state that needs to update every single pass.
-
-
-    * String Parser
+    * String Parser (v0.1.8)
         
         For single line strings we only need to worry about equal_sign_parse() and I think
         it might be abstractly simple in that we only care if ' or " occur before the 
         equal sign.
 
 
-    * Lines that end in '\' awareness
+    * Multiline Comment Engine (v0.2.0)
+
+        Strings are complex enough that I will hand them in two steps. First I'm tackling
+        multi line strings which will be a state that needs to update every single pass.
+
+
+    * Lines that end in '\' awareness (v*.*.*)
 
         I haven't really thought about this one yet because I think it's going to change a lot
         of my algorithm, I'm not really sure how to approach it. I suppose another boolean in
@@ -30,6 +30,7 @@ that happens. I will probably slow down development of IceBrakes around version 
         operator.
 
 
+    # This one is a sloppy writeup
     * Square Brace Checker (this unblocks all the below features)
 
         if foo is immutable the foo[x] = is illegal. So let's check for that as a type 
