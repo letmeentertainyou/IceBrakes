@@ -219,7 +219,7 @@ def equal_sign_parse(line: str) -> str:
             if len(line) == idx or line[idx + 1] == '=':
                 return name
 
-    name = name_assembler(line_to_idx=line[:idx])
+    name = name_assembler(line_to_idx=line[:idx])        ### ALTERED
     return name
 
 
