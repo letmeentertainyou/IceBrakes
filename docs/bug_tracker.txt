@@ -38,3 +38,9 @@ if len_line_lstrip == 0 or line_lstrip[0] == '#':
 
 I was on the right line of thinking when it came to the bug fix, but now I will have a more documented
 understanding of my original failing. 
+
+
+BUG 2001
+equal_sign_parse() did not have string awareness, now it does. This is covered in
+tests 0015. I don't feel this deserves it's own bug test or writeup. I already did
+a writeup for the feature being added.

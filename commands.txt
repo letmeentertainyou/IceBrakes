@@ -14,6 +14,12 @@ $ alias ctog='~/Python/Projects/IceBrakes/src/scripts/cleanup_toggle.py'
 # convert all sym links to hard links (stolen from superuser)
 $ find -type l -exec bash -c 'ln -f "$(readlink -m "$0")" "$0"' {} \;
 
+# diff expected test output from the generated output
+testdiff(){
+    perm=~/Python/Projects/IceBrakes/src/tests/data/perm/test_$1.txt
+    tmp=~/Python/Projects/IceBrakes/src/tests/data/tmp/test_$1.txt
+    diff $perm $tmp }
+
 
 #### GIT ####
 

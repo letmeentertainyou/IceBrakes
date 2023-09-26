@@ -201,7 +201,7 @@ def equal_sign_parse(line: str) -> str:
     name: str = ''
     idx:int = 0
 
-    # FOUND A BUG WHEN LINTING THIS FILE, THESE EQUAL SIGNS ARE NOT
+    # FOUND A BUG (2001) WHEN LINTING THIS FILE, THESE EQUAL SIGNS ARE NOT
     # BEING IGNORED EVEN THOUGH THEY ARE STRINGS. STRING AWARENESS NEEDED.
     for symbol in ['-=', '+=', '*=', '%=', ':=', '/=', '//=']:
         if symbol in line:

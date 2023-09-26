@@ -1,5 +1,5 @@
 #!/bin/python3
-'''v0.1.7
+'''v0.1.8
 Run main.py with the path to a python file as the only argument. 
 Support for dirs will be added in the future. 
 
@@ -59,6 +59,7 @@ def dir_or_file(path: str) -> None:
             for file in files:
 
                 if file.endswith(".py") is True:
+                    print(f'Linting results for {file}:')
                     code = icebrakes(f"{fullpath}/{file}", dir_mode=True)
                     exit_codes.append(code)
         print(exit_codes)
@@ -189,9 +190,14 @@ def equal_sign_parse(line: str) -> str:
     '''This method parses a string for any single equal sign
     and gets the first name before the equal sign.'''
 
-    def name_assembler(name: str='', idx: int=0) -> str:
+    def name_assembler(line_to_idx: str='') -> str:
         '''Parses all chars that can be in a name and stops when an invalid char is found.'''
-        for char in line[:idx]:
+        name: str = ''                   ### NEW
+        for symbol in "(\"'":            ### NEW  ### BUG FIX 2001
+            if symbol in line_to_idx:    ### NEW
+                return name              ### NEW
+
+        for char in line_to_idx:
             name_chars=list(string.ascii_lowercase + string.ascii_uppercase + string.digits + '_')
             if char not in name_chars:
                 break
@@ -199,10 +205,8 @@ def equal_sign_parse(line: str) -> str:
         return name
 
     name: str = ''
-    idx:int = 0
+    idx: int = 0
 
-    # FOUND A BUG WHEN LINTING THIS FILE, THESE EQUAL SIGNS ARE NOT
-    # BEING IGNORED EVEN THOUGH THEY ARE STRINGS. STRING AWARENESS NEEDED.
     for symbol in ['-=', '+=', '*=', '%=', ':=', '/=', '//=']:
         if symbol in line:
             idx = line.index(symbol)
@@ -214,7 +218,7 @@ def equal_sign_parse(line: str) -> str:
             if len(line) == idx or line[idx + 1] == '=':
                 return name
 
-    name = name_assembler(idx=idx)
+    name = name_assembler(line_to_idx=line[:idx])
     return name
 
 

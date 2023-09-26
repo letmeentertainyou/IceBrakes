@@ -300,4 +300,39 @@ But it's worth mentioning that my benchmark, by design, is not a real world exam
 it sees dramatic speed changes.
 
 
+### THIS NEEDS TO BE TESTED/POLISHED/TIMED
+
+* String Parser (v0.1.8)
+    
+    For single line strings we only need to worry about equal line parse
+    and I think it might be abstractly simple in that we only care if ' or "
+    occur before the equal sign.
+
+    'word' = 5   # illegal
+
+    This going to be implemented in the same way I originally approached skipping
+    parenthesis before I wrote paren_parser (which could use a new name).
+
+    I'm also going to add that feature back in to avoid lines like this
+
+    foo(bar=55)
+    since that should be allowed. 
+
+    These changes will take place exclusively in equal_sign_parse() and I
+    will also change the order of equal_sign_parse() and paren_parse() assuming
+    that doesn't break any tests.
+
+    I managed to implement these changes in four lines of code. Now onto multi line strings.
+    My best guess is that multiline strings will take 6-12 lines of code as it involves a 
+    fair bit more state.
+
+AFTER TIMES:
+real    0m0.617s
+user    0m0.326s
+sys     0m0.031s
+
+    The tiny time loss here is probably noise but I do expect time losses with some of these
+    changes. 
+
+    
 Copyright © 2023 Lars S.

@@ -101,12 +101,6 @@ equal_sign_parse equal_sign_parse(line: str) -> str
     I also added support for other kinds of assignment like +=, *=, /=. The
     dreaded and ugly := operator is not yet supported because it's weird.
 
-    There is currently a BUG where IceBrakes doesn't know about strings yet.
-    
-        'x = 45' 
-
-    Would create the name 'x which is not desirable. This will be addressed urgently.
-
 
 cross_reference(constants: DictStrSet, all_vars: DictStrSet, states: States) -> None:
 

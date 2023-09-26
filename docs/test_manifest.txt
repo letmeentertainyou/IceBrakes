@@ -39,21 +39,28 @@ can mutate the original. This will be a huge mutability safety net.
 0008 *
 On that note you also shouldn't be allowed to change the individual values in an immutable list
 or dict. Of course in python only tuples have that behavior but we are adding it in manually.
-0009 *
-The async recursive assignment test. A couple sins are committed here.
+0009 ***
+RELEGATED. Upon reflection this test achieved nothing and will be removed from the repo.
+The number 0009 will go to the next test that I write. 
 0010 *
 Classes baby! This test checks for changes to immutable class vars in class methods, and
-properties.
+properties. Test 10 comes with a significant amount of complexity and solves a problem that
+frozen dataclasses already solve. So this might be vaporware.
 0011
 Added support for +=, -=, //= etc operators.
 0012 *
-Still need support for := operator because it is usually prefaced by something like 'if'.
+Still need support for := operator because it is usually prefaced by something like 'if'. There
+is a good chance this feature will not be supported by IceBrakes.
 0013
 Checks that IceBrakes ignores comments (# only)
 0014
 First scope test.
 0015
 More in depth scope test.
+0016
+Test string skipping
+0017
+Test parenthesis skipping
 
 
 #### FILESYSTEM TESTS ####
