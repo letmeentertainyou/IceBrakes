@@ -295,5 +295,9 @@ real    0m9.546s
 user    0m2.582s
 sys     0m1.385s
 
+I just figured out what caused the speedup and I'm leaving it as an exercise for the reader.
+But it's worth mentioning that my benchmark, by design, is not a real world example and so 
+it sees dramatic speed changes.
+
 
 Copyright © 2023 Lars S.

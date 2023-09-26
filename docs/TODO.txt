@@ -1,24 +1,42 @@
+My current plan is to get the below features locked in and then start a new project
+and actually use IceBrakes as a linter on that project. That will help me find more
+edge cases and bugs in IceBrakes. I consider the below features to be required before
+that happens. I will probably slow down development of IceBrakes around version 0.2.5.
+
+
 # MISSING FEATURES
-Implement tests #5-10 and #12 (detailed bellow)
 
-    * Line Skip engine (v0.1.7)
+    * Multiline Comment Engine (v0.1.8)
 
-        I'm going to build this before the features below. By itself this feature will not be
-        possible to enable. We will need cases to trigger this mode as defined below.
+        Strings are complex enough that I will hand them in two steps. First I'm tackling
+        multi line strings which will be a state that needs to update every single pass.
 
 
-    *  String awareness (ignore parsed words in quotes)
+    * String Parser
         
-        I have a more detailed writeup of my approach plan in strings.py, writing the multiline
-        string parser will be the first step to address most of the below tasks. Multiline and 
-        line's ending in \' need the same multiline engine but with different criteria.
-
-        I can write the multiline engine for any of the below work too and backport it to strings
-        if I feel more motivated to move that direction. I am enjoying building this project out
-        in such a modular way because it's pretty easy to expand so far.
+        For single line strings we only need to worry about equal_sign_parse() and I think
+        it might be abstractly simple in that we only care if ' or " occur before the 
+        equal sign.
 
 
-    * Assigning a shallow copy to a new name which causes mutation
+    * Lines that end in '\' awareness
+
+        I haven't really thought about this one yet because I think it's going to change a lot
+        of my algorithm, I'm not really sure how to approach it. I suppose another boolean in
+        States() to track if we are on a multiline is a good start.
+
+        I can't decide if this feature will be simple/complex or if it's even that relevant to
+        assignment so this feature is pretty low on my list. I rarely if ever use the line split
+        operator.
+
+
+    * Square Brace Checker (this unblocks all the below features)
+
+        if foo is immutable the foo[x] = is illegal. So let's check for that as a type 
+        of assignment. This is going to cost a lot of performance but it's fundamental.
+
+
+    * Shallow Copy Prevention
         
         I don't think this will be too tricky but it's gonna have a lot of processing overhead
         because before I only cared about name assignments that matched the constants dict and
@@ -27,7 +45,7 @@ Implement tests #5-10 and #12 (detailed bellow)
         an order of magnitude in time.
 
 
-    * Multiline assignment (weird whitespace hack)
+    * Multiline Assignment (weird whitespace hack)
 
         I just remembered this is legal in python and I have no clue how to parse for it.
 
@@ -45,13 +63,6 @@ Implement tests #5-10 and #12 (detailed bellow)
             bar = foo
 
         That would be always illegal in the simplest approach.
-
-
-    * Lines that end in '\' awareness
-
-        I haven't really thought about this one yet because I think it's going to change a lot
-        of my algorithm, I'm not really sure how to approach it. I suppose another boolean in
-        States() to track if we are on a multiline is a good start. 
 
 
     * Multi value assignments (tuple expansion)
