@@ -26,10 +26,10 @@ docs/
 
 
 relegated/
-    * old versions of the source code that have been preserved before major changes.
+    * old versions of the source code that have been preserved before major changes, these will not
+    be deleted.
     
-    * icebrakes.py v0.0.7
-
+    * other documentation/testing/src odds and ends, these will probably be deleted after a few updates.
 
 src/
     scripts/
