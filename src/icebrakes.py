@@ -191,7 +191,7 @@ def equal_sign_parse(line: str) -> str:
     '''This method parses a string for any single equal sign
     and gets the first name before the equal sign.'''
 
-    def name_assembler(line_to_idx: str='') -> str:
+    def name_assembler(line_to_idx: str='') -> str:         ### ALTERED
         '''Parses all chars that can be in a name and stops when an invalid char is found.'''
         name: str = ''                   ### NEW
         for symbol in "(\"'":            ### NEW  ### BUG FIX 2001
