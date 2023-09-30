@@ -1,16 +1,21 @@
-This document contains all the globals, classes, functions and their apis from icebreaks.py.
+This document contains all the globals, classes, functions and their apis from icebrakes.py.
+
+*EXIT CODES*
+
+    0: Lint passed
+    1: Lint failed.
 
 
-### GLOBALS ###
+*GLOBALS*
 
-*** DictStrSet = Dict[str, set]
+DictStrSet = Dict[str, set]
     DictStrSet is a type aliases because the type hint Dict[str, set] occurs a lot in IceBrakes.
 
 
-### CLASSES ### 
+*CLASSES*
 
-States
-This is a bit of a catchall class it handles global state bools, as well as namespace scoping tools.
+States()
+This is a bit of a catchall class it handles global state, as well as a way to refresh that state.
     
     *PROPERTIES*
 
@@ -23,27 +28,33 @@ This is a bit of a catchall class it handles global state bools, as well as name
     old_indent: int = -999
         The previous indentation level which is needed for changing scopes.
 
-    names_in_scope = [('root', 0)]
-        The list tracks the current scope relative to the root of the file and is how we build the custom dict keys that implement scope tracking.
+    multiline_status: int = 0
+        1: There is an open triple single quote comment.
+        0: There are no open multiline comments.
+       -1: There is an open triple double quote comment.
 
-    dir_mode: bool = False           # NOT WRITTEN YET
-        This bool tracks wether we are parsing a single file or a directory. 
+
+    (these are defined in __post_init__())
+        names_in_scope: List[Tuple] = [('root', 0)]
+            The list tracks the current scope relative to the root of the file and is how we 
+            build the custom dict keys that implement scope tracking.
+
+        loops_in_scope: List[Tuple] = [('root', 0)]
+            Uses the sample api as names_in_scope to track loops.
 
 
     *METHODS*
 
     update_indent(self, indent: int) -> None
         This method updates the indent level and when the indent level
-        goes down it leaves the current scope.
+        goes down it leaves the current scope and loop as needed.
 
 
-### FUNCTIONS ###
+*FUNCTIONS*
 
-file_or_dir(path: str) -> None       # RENAME
+dir_or_file(path: str) -> None
     Takes an input string and if it's a dir recursively lints it,
     and if it's a file lints it, and otherwise prints an error message.
-    
-    This one function is all we needed for dir support.
 
 
 icebrakes(filepath: str, dir_mode: bool=False) -> int
@@ -57,15 +68,15 @@ get_names_from_file(file: List[str], states: States) -> Tuple[dict, dict]
     One dict is for all_vars in the file and one dict is only for constants. Constants are 
     defined as vars declared on a line ending in #$. 
 
-    There is a subfunction called get_names_from_line() which is run on nonempty/noncomment
-    lines of the file and actually grabs the names using paren_parse() and equal_sign_parse().
-
     When paren_parse() returns a nonempty string get_names_from_line() adds a new entry to
     States.names_in_scope to keep track of the new namespace we are in.
 
     Once per line of the file get_names_from_file() also calls States.update_indent() to change
     the current, and past indent vars and to leave the scope when indent decreases.
-
+    
+    get_name_from_line(line: str, indent: int) -> str:
+        This subfunction is run on nonempty/noncomment lines of the file and actually grabs 
+        the names using paren_parse() and equal_sign_parse().
 
 name_gen(name: str, states: States) -> str
 
@@ -101,10 +112,8 @@ equal_sign_parse equal_sign_parse(line: str) -> str
     I also added support for other kinds of assignment like +=, *=, /=. The
     dreaded and ugly := operator is not yet supported because it's weird.
 
-
-cross_reference(constants: DictStrSet, all_vars: DictStrSet, states: States) -> None:
-
-    Once you have the constants and all_vars for a given python file you can cross reference them to see if any constants are overwritten illegally and inform the users. This is the main interface our users will interact with.
+    name_assembler(line_to_idx: str='') -> str
+        This sub function parses an accepted line for any names assigned with an equal sign.
 
 
 white_space_parse(file: List[str]) -> int
@@ -120,15 +129,20 @@ white_space_parse(file: List[str]) -> int
     errors IceBrakes may have unexpected output.
 
 
-### EXIT CODES ###
+multiline_comment_parse(line: str, states: States) -> int
 
-    0: Lint passed
-    1: Lint failed.
+    This function tracks whether a multiline comment is opened or closed on any given line.
+    Using the variable States.multiline_status we track what comment mode IceBrakes is in.
+    The possible values for States.multiline_status break down like this.
+    
+    1: There is an open triple single quote comment.
+    0: There are no open multiline comments.
+   -1: There is an open triple double quote comment.
 
-    Exit code 2 was relegated for directory support.
-    2: No immutables declared.
+    find_first_index(tag: str, line: str) -> Tuple
+        Subfunction that grabs the index of the first occurrence of a given string.
 
-    It turned out to be pretty complicated adding exit code three because
-    some lines might trigger EC3 and some might trigger EC1. So now any failures
-    result in EC1 and EC2 is still used for when a lint isn't run at all.
-    3: Immutable declared on a line but not defined.
+
+cross_reference(constants: DictStrSet, all_vars: DictStrSet, states: States) -> None:
+
+    Once you have the constants and all_vars for a given python file you can cross reference them to see if any constants are overwritten illegally and inform the users. This is the main interface our users will interact with.

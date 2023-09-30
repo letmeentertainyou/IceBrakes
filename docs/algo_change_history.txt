@@ -1,3 +1,9 @@
+This document consists of a lot of different write ups copy and pasted together
+and it has not been thoroughly proofread. This document is intended for historical
+purposes but I don't expect it to read coherently like the README does.
+
+##################################################################################
+
 ALGORITHM IMPROVEMENT IDEAS!
 
 These notes were living in TODO but it got a bit sloppy. I spent a while
@@ -13,12 +19,10 @@ these improvements speed up testing.
 These changes are in linear order from the time of writing them so all test times carry
 forward but there may be many more tests in the future.
 
-*** 
 BEFORE TIMES:
 real    0m0.848s
 user    0m0.747s
 sys     0m0.102s
-
 
 Modify IceBrakes algo to only read each file once. You still build two
 dicts for CONSTANTS and ALL_VARS but you do it in one pass.
@@ -55,7 +59,6 @@ real    0m0.875s
 user    0m0.755s
 sys     0m0.122s
 
-
 It's worth noting that currently my tests are very very short files which has been 
 practical to maintain even though it's not realistic. I should grab some existing large
 open source python code, and add my silly marks to it and use it for benchmarking my
@@ -69,8 +72,6 @@ giving us our maximum possible runtime. We are not currently concerned with accu
 linting this file but we do want to track algo time. Now even though I tried to make
 this fairly slow it still only takes 5.7 seconds. But I think that will be enough to
 mark any further improvements.
-
-***
 
 BEFORE TIMES:
 real    0m7.806s
@@ -95,7 +96,6 @@ O(Nᴹ)  ->  O(N)
 I will have to review my code closely to figure out the real max time. It's written as a nested for
 loop wright now which is bad. I need to loop over every line of the file exactly 1 for the purpose
 of writing an output results.
-
 
 O(Nᴹ)  ->  O(N)
 O(Nᴹ + Nᴹ⁺¹)  ->  O(Nᴹ⁺¹)
@@ -192,8 +192,6 @@ the rest of the unit tests can be turned on because a large amount of them relat
 
 I will also need a new major feature to work towards (loops) but I'm sure something will come up.
 
-***************
-
 Upon further thinking I have realized that by creating unique keys I won't actually need the
 nested dict design pattern. Instead I will make a Naming() class that takes a name, and a
 States() object and builds unique name keys. Then anytime two keys match exactly we have
@@ -221,7 +219,6 @@ Use name_gen() to get a real name only after 'if name:' checks
 Use name_split() only when putting a name in message.
 
 With those changes the test suite shouldn't be broken. Give it a try.
-
 
 AFTER TIMES:
 real    0m1.834s
@@ -300,8 +297,6 @@ But it's worth mentioning that my benchmark, by design, is not a real world exam
 it sees dramatic speed changes.
 
 
-### THIS NEEDS TO BE TESTED/POLISHED/TIMED
-
 * String Parser (v0.1.8)
     
     For single line strings we only need to worry about equal line parse
@@ -331,8 +326,46 @@ real    0m0.617s
 user    0m0.326s
 sys     0m0.031s
 
-    The tiny time loss here is probably noise but I do expect time losses with some of these
-    changes. 
 
-    
+* Multiline Comment Engine (v0.2.0)
+
+# More thorough writeup
+#### MULTILINE NOTES ####
+
+At the top of the get_names_from_file() loop for every line of the file we
+will check for triple quotes to either enter or exit a multiline comment. If
+an entrance is found we have to check the rest of the line for an exit. So
+this will require a separate function. We'll have a variable in States() that
+allows us to skip the rest of the line checks until the multi line string
+is exited.
+
+There can only be one multiline string at a time so we only need to track
+whether it was single or double quotes that entered the string and once
+a string is exited we need to continue tracking.
+
+It might be best to use regex to get every occurrence of """ from the line
+and then do some logic based on the tree of """s. We need to track groups
+of three quotes at a time, and track the index of the third quote. So that
+a pattern line """" doesn't appear as an entrance and an exit. (regex was
+quickly abandoned because it does not fit the problem at all.)
+
+Also """" "" is not a valid exit either. It needs to be another group of
+three quotes like """""" or """ """
+
+If there are characters before the string starts then we do need to parse
+the line. So this is mostly for tracking when entire sections of a file
+are not to be parsed.
+
+
+AFTER TIMES:
+real    0m0.522s
+user    0m0.301s
+sys     0m0.040s
+
+    No noticeable difference again but that's good for how complex this feature was. All told
+    this feature clocked in at 27 new lines of code which is quite a lot higher than my estimate
+    of 6-12 lines. I know this task required some complicated state but I really didn't forsee the
+    redundancy required to support both double and single quotes.
+
+
 Copyright © 2023 Lars S.

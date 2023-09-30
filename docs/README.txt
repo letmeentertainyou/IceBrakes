@@ -1,4 +1,7 @@
-version=0.1.8
+version=0.2.0
+######################################################
+Development on IceBrakes has paused with version 0.2.0
+######################################################
 
 *** Using IceBrakes ***
 
@@ -121,19 +124,8 @@ any other projects so it's the name for now.
 
 *** CONTRIBUTING ***
 
-At the time of publishing IceBrakes will be missing many (most) features
-expected of a linter, that is because I have spent a large portion of my time
-writing documentation and a testing methodology. I will be developing features
-after 0.0.1 launches on github.
-
-Therefore one of the easiest ways to contribute will be to write unit tests for
-any missing features so that as I develop the features I can turn the tests on.
-
-If you make a pull request with actual code changes, I will require that you also
-include a passing test file (or multiple) formatted according to the project.
-
-Along with a methodology I have also written some tools to make generating and running
-tests very very easy. If you are interested in learning more read docs/TESTING_README.txt
+Development is paused so contributions may go ignored. Checkout the random chord chart generator
+I'm working on now.
 
 
 Copyright © 2023 Lars S.

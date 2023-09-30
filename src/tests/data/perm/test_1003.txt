@@ -1,7 +1,3 @@
-Linting results for _test_0012.py:
-Immutable var declared on line number 12, but no names found.
-Linting results for _test_0007.py:
-Congrats you passed the IceBrakes lint with a perfect 300/300 score!
 Linting results for test_0011.py:
 Bad use BAR was made static on line 14, and mutated on line 15
 Bad use BAR was made static on line 14, and mutated on line 16
@@ -29,15 +25,11 @@ No constants declared, use #$ at then end of a line with a declaration.
 Linting results for test_0005.py:
 Bad usage was ignored inside for loop on line 10.
 No constants declared, use #$ at then end of a line with a declaration.
-Linting results for _test_0008.py:
-Bad use BAR was made static on line 9, and mutated on line 10
 Linting results for test_0014.py:
 Bad use bar was made static on line 14, and mutated on line 18
 Linting results for test_0017.py:
 Immutable var declared on line number 10, but no names found.
 Immutable var declared on line number 12, but no names found.
-Linting results for _test_0010.py:
-Congrats you passed the IceBrakes lint with a perfect 300/300 score!
 Linting results for test_1003.py:
 No constants declared, use #$ at then end of a line with a declaration.
 Linting results for __init__.py:
@@ -58,6 +50,9 @@ Bad use dar was made static on line 19, and mutated on line 23
 Bad use car was made static on line 27, and mutated on line 30
 Linting results for test_1002.py:
 No constants declared, use #$ at then end of a line with a declaration.
+Linting results for test_0018.py:
+Immutable var declared on line number 10, but no names found.
+Immutable var declared on line number 16, but no names found.
 Linting results for test_9999_cleanup.py:
 No constants declared, use #$ at then end of a line with a declaration.
 Linting results for test_1001.py:
@@ -65,4 +60,4 @@ No constants declared, use #$ at then end of a line with a declaration.
 Linting results for test_0006.py:
 Bad usage was ignored inside while loop on line 8.
 No constants declared, use #$ at then end of a line with a declaration.
-[1, 0, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
+[1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]

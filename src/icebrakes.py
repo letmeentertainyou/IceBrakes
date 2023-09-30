@@ -1,5 +1,5 @@
 #!/bin/python3
-'''v0.1.8
+'''v0.2.0
 Run main.py with the path to a python file as the only argument. 
 Support for dirs will be added in the future. 
 
@@ -26,6 +26,7 @@ class States():
     errors: bool = False
     indent: int = 0
     old_indent: int = -1
+    multiline_status: int = 0         ### NEW
 
     def __post_init__(self) -> None:
         '''Dataclasses can't have lists as properties so this post_init is required.'''
@@ -121,7 +122,17 @@ def get_names_from_file(file: List[str], states: States) -> Tuple[dict, dict]:
         line_lstrip: str = line.lstrip()
         len_line_lstrip: int = len(line_lstrip)
 
-        if len_line_lstrip == 0 or line_lstrip[0] == '#':
+        # This check can still go at the top because it doesn't change the logic.
+        if len_line_lstrip == 0:                 ### CHANGED
+            continue
+
+        multiline_comment_parse(line, states)    ### NEW
+
+        # These two if statements can be combined but I think it will be confusing
+        if states.multiline_status != 0:         ### NEW
+            continue                             ### NEW
+
+        if line_lstrip[0] == '#':                ### MOVED
             continue
 
         loop_parse(line, states)
@@ -194,7 +205,7 @@ def equal_sign_parse(line: str) -> str:
     def name_assembler(line_to_idx: str='') -> str:
         '''Parses all chars that can be in a name and stops when an invalid char is found.'''
         name: str = ''
-        for symbol in "(\"'":            ### BUG FIX 2001
+        for symbol in "(\"'":
             if symbol in line_to_idx:
                 return name
 
@@ -223,32 +234,6 @@ def equal_sign_parse(line: str) -> str:
     return name
 
 
-def cross_reference(constants: DictStrSet, all_vars: DictStrSet, states: States) -> int:
-    '''Once you have the constants and all_vars for a given python file you 
-    can cross reference them to see if any constants are overwritten illegally 
-    and inform the users. The exit status is returned as an int.'''
-
-    for key, values in constants.items():
-        for val in values:
-
-            set_of_line_numbers: Set = all_vars.get(key, set())
-            if set_of_line_numbers is not None:
-
-                for num in set_of_line_numbers:
-                    if num == val:
-                        continue
-
-                    name = name_split(key)
-                    mes=f'Bad use {name} was made static on line {val}, and mutated on line {num}'
-                    print(mes)
-                    states.errors = True
-
-    if not states.errors:
-        print('Congrats you passed the IceBrakes lint with a perfect 300/300 score!')
-
-    return int(states.errors)
-
-
 def white_space_parse(file: List[str]) -> int:
     '''Takes a file and calculates how many spaces that file uses to indent by parsing
     the first 100 indented lines of the file.'''
@@ -273,6 +258,69 @@ def white_space_parse(file: List[str]) -> int:
         return int(reduce(gcd, levels)) # int() here is for mypy.
 
     return 1    # This explicit return is just for mypy/pylint
+
+
+def multiline_comment_parse(line: str, states: States) -> int:  ### NEW
+    '''See IceBrakes API.txt for more detailed explanation, this function tracks
+    whether a multiline comment is opened or closed on any given line.'''
+
+    def find_first_index(tag: str, line: str) -> Tuple:
+        '''Grabs the index of the first occurrence of a given string.'''
+        try:
+            return line.index(tag), tag
+        except ValueError:
+            return None, None
+
+    single: str = "'''"
+    double: str = '"""'
+    tags: List[str] = []
+
+    if single in line and states.multiline_status >=0:
+        tags.append(single)
+
+    if double in line and states.multiline_status <=0:
+        tags.append(double)
+
+    if tags:
+        all_tags: List[Tuple] = [find_first_index(tag, line) for tag in tags]
+        smallest = min(all_tags)
+
+        if smallest[1] == single:
+            states.multiline_status = 1 if states.multiline_status == 0 else 0
+
+        if smallest[1] == double:
+            states.multiline_status = -1 if states.multiline_status == 0 else 0
+
+        idx = smallest[0]
+        multiline_comment_parse(line=line[idx+3:], states=states)
+
+    return states.multiline_status
+
+
+def cross_reference(constants: DictStrSet, all_vars: DictStrSet, states: States) -> int:
+    '''Once you have the constants and all_vars for a given python file you 
+    can cross reference them to see if any constants are overwritten illegally 
+    and inform the users. The exit status is returned as an int.'''
+
+    for key, values in constants.items():
+        for val in values:
+
+            set_of_line_numbers: Set = all_vars.get(key, set())
+            if set_of_line_numbers is not None:
+
+                for num in set_of_line_numbers:
+                    if num == val:
+                        continue
+
+                    name = name_split(key)
+                    mes=f'Bad use {name} was made static on line {val}, and mutated on line {num}'
+                    print(mes)
+                    states.errors = True
+
+    if not states.errors:
+        print('Congrats you passed the IceBrakes lint with a perfect 300/300 score!')
+
+    return int(states.errors)
 
 
 if __name__ == '__main__':

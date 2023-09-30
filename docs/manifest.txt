@@ -8,8 +8,6 @@ docs/
     
     * commands.txt (aliases I use for the project, and useful commands.)
 
-    * CONTRIBUTING.txt (How to help document and write code for IceBrakes)
-
     * icebrakes API.txt (A break down of all the functions and their parameters)
 
     * LICENSE.txt (gplv3)
@@ -26,10 +24,15 @@ docs/
 
 
 relegated/
+    tests/
+        * tests that I'm no longer developing towards.
+
+    trash/ (not public)
+        * Files I no longer want in the repo but I may want to reference later.
+
     * old versions of the source code that have been preserved before major changes, these will not
     be deleted.
     
-    * other documentation/testing/src odds and ends, these will probably be deleted after a few updates.
 
 src/
     scripts/

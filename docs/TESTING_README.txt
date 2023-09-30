@@ -1,5 +1,4 @@
-# URGENT
-WHENEVER A BUG IS FOUND, AND FIXED, WRITE A TEST!
+################### BUG FIXES ######################
 
 This is a new addition to the methodology. Now any bug fixes need
 to be manually tested so that they will be caught easier in the feature.
@@ -8,21 +7,7 @@ I understand now why bugs are assigned numbers and documented. While it is
 often easy to patch the bugs I discover, I am not really documenting them
 and that leaves me exposed to doing the exact same work over and over again.
 
-Bug tests will start with the number 2.
-
-
-*** Addendum ***
-    Most of the these tools only apply to tests starting in 0 now.
-    test_0000.py to test_0999.py, this gives us 1000 tests following
-    the format and gives us room for any tests that will not be linting themselves.
-
-    We need tests for various other interfaces in the main package, as well as
-    tests for the testing tools and neither of these will use the template methodology
-    laid out. 
-
-    There was an oversight when I wrote the part of tools.py that regenerates test data
-    and that code would delete the test data that doesn't start with 0. Which we don't want
-    to do. Fixed that bug.
+Bug tests will be numbered 2000-2999.
 
 
 ################### TESTING ######################
@@ -34,12 +19,18 @@ All tests need to be backwards and forwards compatible so I am not writing tests
 to prove that features don't exist. If for example I wrote a test to prove that 
 scopes aren't implemented, then I would need to delete that test when scopes are added.
 
-Instead I will focus on core features and add additional 'completeness' testing as I go.
+Most of the these tools only apply to tests starting in 0 test_0000.py to test_0999.py,
+this gives us 1000 tests following the format and gives us room for any tests that will
+not be linting themselves.
+
+We need tests for various other interfaces in the main package, as well as
+tests for the testing tools and neither of these will use the template methodology
+laid out in this doc. 
 
 There are two main python files in src/tests
     template.py (a sample test)
     tools.py (the testing api)
- 
+
 
 *** bellow is the full text of template.py for reference
 
@@ -119,10 +110,12 @@ Below is a list of functions provided in tools.py.
 
     Also there is a sed command that replaces "test_number" in the template with the real number of the test being created.
 
+
 *** cleanup() -> None
     Deletes the temporary .txt files created during the tests.
     This leaves the .gitignore file which is important for
     git to recognize empty dirs which I've decided I want
+
 
 *** filecmp(path_1: str, path_2: str) -> bool
     This is named after the python builtin filecmp.cmp but my 
@@ -172,10 +165,7 @@ Below is a list of functions provided in tools.py.
 
     'Every test' is defined as files in src/tests/tests that start with 
     the four characters 'test' this means any '_test' file is 
-    ignored until the file's name is changed. 
-
-    As a side effect no file/folder is src/tests/tests can have less than four chars 
-    in it's name.
+    ignored until the file's name is changed.
 
 
 Copyright © 2023 Lars S.

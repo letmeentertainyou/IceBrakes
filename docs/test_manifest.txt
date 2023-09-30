@@ -61,7 +61,8 @@ More in depth scope test.
 Test string skipping
 0017
 Test parenthesis skipping
-
+0018
+Multiline Comment Parser test.
 
 #### FILESYSTEM TESTS ####
 

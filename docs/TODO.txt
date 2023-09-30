@@ -1,21 +1,10 @@
-My current plan is to get the below features locked in and then start a new project
-and actually use IceBrakes as a linter on that project. That will help me find more
-edge cases and bugs in IceBrakes. I consider the below features to be required before
-that happens. I will probably slow down development of IceBrakes around version 0.2.5.
-
-Because I intend to slow down work on IceBrakes soon I have move docs/CONTRIBUTING.txt'
-to relegated. I won't be doing any code reviews when the project is stalled.
-
+######################################################
+Development on IceBrakes has paused with version 0.2.0
+######################################################
 
 # MISSING FEATURES
 
-    * Multiline Comment Engine (v0.2.0)
-
-        Strings are complex enough that I will hand them in two steps. First I'm tackling
-        multi line strings which will be a state that needs to update every single pass.
-
-
-    * Lines that end in '\' awareness (v*.*.*)
+    * Lines that end in '\' awareness
 
         I haven't really thought about this one yet because I think it's going to change a lot
         of my algorithm, I'm not really sure how to approach it. I suppose another boolean in
@@ -24,27 +13,6 @@ to relegated. I won't be doing any code reviews when the project is stalled.
         I can't decide if this feature will be simple/complex or if it's even that relevant to
         assignment so this feature is pretty low on my list. I rarely if ever use the line split
         operator.
-
-
-    # This one is a sloppy writeup
-    * Square Brace Checker (this unblocks all the below features)
-
-        There are a few times when square braces can be used to assign a value and we need a
-        method of linting for those. For example if bar is immutable then 
-            
-            bar[x] = None
-
-        is illegal. So let's check for that type of assignment. This is going to cost a lot of 
-        performance but it's fundamental to the shallow copy problem below.
-
-
-    * Shallow Copy Prevention
-        
-        I don't think this will be too tricky but it's gonna have a lot of processing overhead
-        because before I only cared about name assignments that matched the constants dict and
-        after this change I will need to track the values assigned to all names in the file to
-        make sure none of the constants are shallow copied to another name. So we might gain an
-        an order of magnitude in time.
 
 
     * Multiline Assignment (weird whitespace hack)
@@ -78,8 +46,27 @@ to relegated. I won't be doing any code reviews when the project is stalled.
         the above four features will depend on each other's apis before actually writing the code. 
 
 
-# CHANGELOG
+    * Square Brace Checker
 
+        There are a few times when square braces can be used to assign a value and we need a
+        method of linting for those. For example if bar is immutable then 
+            
+            bar[x] = None
+
+        is illegal. So let's check for that type of assignment. This is going to cost a lot of 
+        performance but it's fundamental to the shallow copy problem below.
+
+
+    * Shallow Copy Prevention
+        
+        I don't think this will be too tricky but it's gonna have a lot of processing overhead
+        because before I only cared about name assignments that matched the constants dict and
+        after this change I will need to track the values assigned to all names in the file to
+        make sure none of the constants are shallow copied to another name. So we might gain an
+        an order of magnitude in time.
+
+
+# CHANGELOG
 Enabled tests 0000, 0004, 1001
 Added exit codes 0, 1, 2
 Added States dataclass to remove globals from icebrakes.py
@@ -99,6 +86,9 @@ Added bug testing policy
 Added recursive directory support and test 1003 for directories.
 Added loop support and turned on tests 5 and 6.
 Added basic string parsing and enabled tests 16 and 17, BUGFIX 2001.
+Added a multiline commenter parsing engine, and test 18.
+Relegated tests 7, 8, 10 and 12 for now. 
+Entered development pause on v0.2.0
 
 
 Copyright © 2023 Lars S.
