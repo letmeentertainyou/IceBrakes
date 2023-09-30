@@ -1,5 +1,5 @@
 # pylint: skip-file
-'''This test is for multiline comments. We should get errors on lines 9 and 15.'''
+'''This test is for multiline comments. We should get errors on lines 10 and 16.'''
 from src.tests.tools import pytest_runner
 
 ##################################################

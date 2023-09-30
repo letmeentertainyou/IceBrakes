@@ -86,7 +86,7 @@ Added bug testing policy
 Added recursive directory support and test 1003 for directories.
 Added loop support and turned on tests 5 and 6.
 Added basic string parsing and enabled tests 16 and 17, BUGFIX 2001.
-Added a multiline commenter parsing engine, and test 18.
+Added a multiline comment parsing engine, and test 18.
 Relegated tests 7, 8, 10 and 12 for now. 
 Entered development pause on v0.2.0
 
