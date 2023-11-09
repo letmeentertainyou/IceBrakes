@@ -23,7 +23,7 @@ that. I am going to keep the bug fix though because there is no compiler to prot
 users.
 
 Untested because I couldn't recreate. This is a good example of how I should focus on
-testing as soon as I discover bugs so that I know where they truly come from. We should continue
+testing as soon as I discover bugs so that I know where they truly come from. I will continue
 to track bugs even if they can't be recreated.
 
 Stayed up too late to think last night, now I understand bug 2000. I was originally only concerned
@@ -41,6 +41,6 @@ understanding of my original failing.
 
 
 BUG 2001
-equal_sign_parse() did not have string awareness, now it does. This is covered in
+The function equal_sign_parse() did not have string awareness, now it does. This is covered in
 tests 0015. I don't feel this deserves it's own bug test or writeup. I already did
 a writeup for the feature being added.

@@ -2,47 +2,46 @@ __init__.py files are ignored in this doc.
 
 
 docs/
-    * algo_change_history.txt (A history of new feature write ups)
-
-    * bug_tracker.txt (known bugs, and notes about them)
+    * bug_tracker.txt (Known bugs, and notes about them)
     
-    * commands.txt (aliases I use for the project, and useful commands.)
+    * commands.txt (Useful commands and aliases.)
 
-    * icebrakes API.txt (A break down of all the functions and their parameters)
+    * API.txt (A break down of all the functions and their parameters)
 
     * LICENSE.txt (gplv3)
 
     * manifest.txt (list of all files in the root dir)
     
-    * README.txt (this document)
+    * README.txt
     
-    * test_manifest.txt (list of all tests)
+    * test_manifest.txt (Documentation of all the tests.)
     
-    * TESTING_README.txt (a writeup of the testing methodology and tools)
+    * TESTING_README.txt (Writeup of the testing methodology and tools.)
 
-    * TODO.txt (the current tasks to be done)
+    * TODO.txt (The current tasks to be done, and changelog.)
 
 
 relegated/
     tests/
-        * tests that I'm no longer developing towards.
+        * Tests that I'm no longer developing towards.
 
     trash/ (not public)
         * Files I no longer want in the repo but I may want to reference later.
 
-    * old versions of the source code that have been preserved before major changes, these will not
-    be deleted.
-    
+    old_versions/
+        * Old versions of the source code that have been preserved before major changes
+        were committed to.
+
+
+scripts/
+    * cleanup_toggle.py (enables/disables cleanup test)
+
+    * pre-commit (turns the cleanup test on, and runs pytest/mypy/pylint)
+
 
 src/
-    scripts/
-        * cleanup_toggle.py (enables/disables cleanup test)
 
-        * pre-commit (runs unifier.sh on commit attempts)
-
-        * unifier.sh (turns the cleanup test on, and runs pytest/mypy/pylint)
-
-    * icebrakes.py (the main file, documented in docs/icebrakes API.txt)
+    * icebrakes.py (the main file, documented in docs/API.txt)
 
     tests/
         data/
@@ -53,9 +52,9 @@ src/
                 * test generated output data
 
         tests/
-            * all the unit tests go here
+            * all the tests go here
 
-    * template.py (used to create new unit tests)
+    * template.py (used to create new tests)
 
     * tools.py (helpful tools documented in docs/TESTING_README.txt)
 
@@ -64,29 +63,20 @@ src/
 
 A few of these config settings come from a personal project with more modules, 
 and so the path corrections may be overkill for the current state of this project 
-but they will help if I add modules. These are formatted different because of the 
-longer write ups.
-
+but they will help if I add modules
 
 /.coveragerc
 This file tells pytest --cov which python files I am not testing. This includes __init__.py, 
-the tests themselves, lines like 'if __name__ == "__main__":', and 'def main()' as in my coding 
-style these things usually do not need to be on the coverage report.
+the tests themselves, lines like 'if __name__ == "__main__":', and 'def main()'.
 
 /.pylintrc
-Python paths are weird and even when other tools work fine pylint likes to throw this error E0401 
-and I don't like getting imperfect lint scores so I just remove that error. It has no berring on 
-whether the code actually resolves my imports correctly.
+A list of pylint errors I have disabled and some explanations.
 
 /mypy.ini
-A whole bunch of settings to make mypy way more hardcore. Read the file for more hints.
-Add a rule to ignore test_*.py files here.
+A whole bunch of settings to make mypy more strict.
 
 /pyproject.toml
-Seriously more python path fixes one is for pytest (also needed is my path corrections 
-in src/__init__.py) and another path fix is for mypy's stubgen. Currently this project doesn't 
-have any stubs so this is kind of irrelevant but again it will be nice to have if I add 
-a need for stubs.
+Seriously more python path fixes one is for pytest and the other is for mypy's stubgen.
 
 /pyrightconfig.json
 This file tells vscode which dirs I don't want linting in. It's mostly for all the cache 

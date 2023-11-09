@@ -17,17 +17,17 @@ You can install IceBrakes with the following command
 $ sudo cp icebrakes.py /usr/local/bin/icebrakes
 
 If you are interested in diving into the code or using IceBrakes as a module
-I have documented the entire api of icebrakes.py in docs/IceBrakes API.txt
+I have documented the entire api in docs/API.txt
 
 
 *** What is IceBrakes? ***
 
-IceBreaks is an attempt to provide typescript style const variables to python. That is, 
+IceBreaks is an attempt to provide immutable variables to python. That is, 
 what if a linter could tell you when you break immutability?
 
-It's true that python has things like tuples and frozen data classes which cannot 
-be modified; the value of any variable in python can be freely assigned. Consider the 
-following python code.
+While it's true that python has things like tuples and frozen data classes which cannot 
+be modified unfortunately the value of any variable in a python script can be freely 
+assigned. Consider the following python code.
 
     x = (1, 2, 3)   # this is a tuple
 
@@ -39,7 +39,7 @@ following python code.
     x = []          # VALID PYTHON
     x = [7, 2, 3]   # VALID PYTHON
 
-While you cannot change the indivual elements of a tuple there are several other ways 
+While you cannot change the individual elements of a tuple there are several other ways 
 to lose track of the value. Here is another example using dataclasses.
 
     from dataclasses import dataclass
@@ -57,8 +57,8 @@ what the name 'foo' references. My proposal is for some kind of syntax to let
 the language know you cannot reassign to a given name.
 
 For simplicity that syntax is implemented as a comment at the end of a line. 
-Hashmark dollarsign (#$) as the last two characters of the line tells IceBrakes to 
-jump into action. Here's an example use and the expected output, with line numbers for clarity.
+"#S" as the last two characters of the line tells IceBrakes to jump into action.
+Here's an example use and the expected output, with line numbers for clarity.
 
     1 def bar():... #$
     2 bar = 56
@@ -76,13 +76,8 @@ illegal. See the reverse of the above example.
 
 For more detailed examples of usage read TESTING_README.txt and the unit tests in src/tests/tests
 
-IceBrakes is in early development consisting of less than 100 lines of code, and lots 
-and lots of documentation. Now that the docs are written I will focus on adding features 
-and more test cases.
-
-Once more features are added you can expect this document to expand and possibly split 
-into multiple further documents. If you are looking for more information see docs/manifest.txt
-which explains all of the files in IceBrakes.
+If you are looking for more information see docs/manifest.txt which explains all of the
+files in IceBrakes.
 
 
 *** Why does IceBrakes exist? ***
@@ -102,30 +97,6 @@ in regular valid python files.
 
 I personally would love to see a "const" keyword added to python but I don't really know how much work
 it would be to add something like that to the language so IceBrakes is my stopgap compromise.
-
-
-*** Who is the dev? ***
-
-IceBrakes is developed by me, Lars. I'm a linux nerd and Python enthusiast. I'm also a 
-musician and in general I like patterns and abstract concepts. 
-
-Permissions are granted to anyone who wishes to use or edit this code in accordance 
-with the GPLv3 Copyleft license provided. So you too can be the developer if you'd like.
-
-
-*** What's in a name? ***
-
-I chose the name IceBrakes because pymmutable was a mouthful. I did try to come up with
-other clever names that include py and I felt like it was an uphill battle. I like that ice
-implies some level of immutability like a frozen dataclass, and brakes implies that my project
-pulls the brakes on your code. Anyways, it's a silly name but it doesn't seem to be taken by 
-any other projects so it's the name for now.
-
-
-*** CONTRIBUTING ***
-
-Development is paused so contributions may go ignored. Checkout the random chord chart generator
-I'm working on now.
 
 
 Copyright © 2023 Lars S.

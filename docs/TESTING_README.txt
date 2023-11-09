@@ -1,16 +1,16 @@
-################### BUG FIXES ######################
+BUG FIXES
 
 This is a new addition to the methodology. Now any bug fixes need
-to be manually tested so that they will be caught easier in the feature.
+to be manually tested so that they will be caught easier in the future.
 
 I understand now why bugs are assigned numbers and documented. While it is
-often easy to patch the bugs I discover, I am not really documenting them
+often easy to patch the bugs I as I discover them, I am not really documenting them
 and that leaves me exposed to doing the exact same work over and over again.
 
 Bug tests will be numbered 2000-2999.
 
 
-################### TESTING ######################
+TESTING
 
 Going from 0.0.1 onward features will be defined in a test before development. 
 See DOCS/test_manifest.txt for a detailed list of the tests and what they check.
@@ -19,13 +19,11 @@ All tests need to be backwards and forwards compatible so I am not writing tests
 to prove that features don't exist. If for example I wrote a test to prove that 
 scopes aren't implemented, then I would need to delete that test when scopes are added.
 
-Most of the these tools only apply to tests starting in 0 test_0000.py to test_0999.py,
-this gives us 1000 tests following the format and gives us room for any tests that will
-not be linting themselves.
+Most of the these tools only apply to test numbers begging with 0. (test_0000.py - test_0999.py).
 
-We need tests for various other interfaces in the main package, as well as
-tests for the testing tools and neither of these will use the template methodology
-laid out in this doc. 
+This testing methodology only tests IceBrakes linter ability. I realize that I should
+write tests outside of the scope of linting as well. Those tests will not use the method
+laid out below.
 
 There are two main python files in src/tests
     template.py (a sample test)
@@ -60,6 +58,11 @@ In the template you write code between the two huge blocks of #s, and then
 you specify the number of the test in the pytest_runner call at the bottom
 of the template. 
 
+When you write a test following this template then the test will uce IceBrakes
+to lint itself and record the output. You have to provide at least one sample of
+an expected output for the given test in order to know if you have passed or failed.
+Generating test output data is detailed below.
+
 Because IceBrakes.py only looks for lines ending in #$ as long as those characters 
 aren't in the rest of the file and no names are duplicated between the test 
 block and the rest of the file, we are essentially only linting the test block.
@@ -84,7 +87,7 @@ the name of the failed test.
 While you can just copy and paste the testing template as you'd like, I did automate that.
 tools.py contains helpers for running tests, generating test data, and generating tests themselves.
 
-This module contains all the tools used by the testing methodology, I'll break it downside
+This module contains all the tools used by the testing methodology, I'll break it down
 by function below.
 
 pytest is my testing tool of choice so you will need to pip install it into
@@ -96,16 +99,16 @@ Below is a list of functions provided in tools.py.
 *** parse_argv(args: List[str]) -> None
     This is the CLI implementation of tools.py. The current use cases are:
 
-    ./tools.py ###
+    ./tools.py ####
     Call tools.py with a single integer arg to generate output data 
     for the given test number.
     
     ./tools.py -a
     -a to generate data for all tests
 
-    ./tools.py -n ###
+    ./tools.py -n ####
     -n to copy the template to a new test file numbered after the second arg.
-    The template will be named _test_###.py which means it will not be run
+    The template will be named _test_####.py which means it will not be run
     by pytest until the leading underscore is removed.
 
     Also there is a sed command that replaces "test_number" in the template with the real number of the test being created.
@@ -113,8 +116,6 @@ Below is a list of functions provided in tools.py.
 
 *** cleanup() -> None
     Deletes the temporary .txt files created during the tests.
-    This leaves the .gitignore file which is important for
-    git to recognize empty dirs which I've decided I want
 
 
 *** filecmp(path_1: str, path_2: str) -> bool
@@ -129,23 +130,18 @@ Below is a list of functions provided in tools.py.
     a python file testing itself.
 
     I simplified it so that all interactions with tools.py take a single
-    integer as input, so this function does the conversion. Thus '000' becomes
-    'test_000.py'
+    integer as input, so this function does the conversion. Thus '0000' or '0' becomes
+    'test_0000.py'
 
     One downside to this is that the entire api relies on the same filename
     which means any new format of test may require additional API features.
-
-    I may find a better method as testing develops further.
 
 
 *** pytest_runner(num: str, get_code: bool=False) -> int
     This function runs a IceBrakes.py lint on the given input file,
     and sends the given output to a tmp file. A test should never be written
-    with an invalid input file because the test_###.py files are 
+    with an invalid input file because the test_####.py files are 
     the test input themselves. 
-    
-    However I should add some code in IceBrakes.py to validate that a given input file is a 
-    valid python file. And then I should write tests for an invalid input use case.
     
     When you call pytest_runner with get_code=True, then pytest_runner returns the exit code
     of icebrakes.py. This is useful for testing the exit codes in test_1001.

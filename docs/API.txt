@@ -36,7 +36,7 @@ This is a bit of a catchall class it handles global state, as well as a way to r
 
     (these are defined in __post_init__())
         names_in_scope: List[Tuple] = [('root', 0)]
-            The list tracks the current scope relative to the root of the file and is how we 
+            The list tracks the current scope relative to the root of the file and is how I 
             build the custom dict keys that implement scope tracking.
 
         loops_in_scope: List[Tuple] = [('root', 0)]
@@ -69,13 +69,13 @@ get_names_from_file(file: List[str], states: States) -> Tuple[dict, dict]
     defined as vars declared on a line ending in #$. 
 
     When paren_parse() returns a nonempty string get_names_from_line() adds a new entry to
-    States.names_in_scope to keep track of the new namespace we are in.
+    States.names_in_scope to keep track of the new namespace.
 
     Once per line of the file get_names_from_file() also calls States.update_indent() to change
     the current, and past indent vars and to leave the scope when indent decreases.
     
     get_name_from_line(line: str, indent: int) -> str:
-        This subfunction is run on nonempty/noncomment lines of the file and actually grabs 
+        This subfunction is run on non-empty/non-comment lines of the file and actually grabs 
         the names using paren_parse() and equal_sign_parse().
 
 name_gen(name: str, states: States) -> str
@@ -121,7 +121,7 @@ white_space_parse(file: List[str]) -> int
     Takes a file and calculates how many spaces that file uses to indent by parsing
     the first 100 indented lines of the file.
 
-    We are considering tabs as whitespace but I haven't written the code to calculate how many
+    I am considering tabs as whitespace but I haven't written the code to calculate how many
     tabs a user is using for one indent. I mostly don't care about tabs to be honest so while
     this will only be a few lines of code, it's not very urgent.
 
@@ -132,7 +132,7 @@ white_space_parse(file: List[str]) -> int
 multiline_comment_parse(line: str, states: States) -> int
 
     This function tracks whether a multiline comment is opened or closed on any given line.
-    Using the variable States.multiline_status we track what comment mode IceBrakes is in.
+    Using the variable States.multiline_status I track what comment mode IceBrakes is in.
     The possible values for States.multiline_status break down like this.
     
     1: There is an open triple single quote comment.
@@ -145,4 +145,4 @@ multiline_comment_parse(line: str, states: States) -> int
 
 cross_reference(constants: DictStrSet, all_vars: DictStrSet, states: States) -> None:
 
-    Once you have the constants and all_vars for a given python file you can cross reference them to see if any constants are overwritten illegally and inform the users. This is the main interface our users will interact with.
+    Once you have the constants and all_vars for a given python file you can cross reference them to see if any constants are overwritten illegally and inform the users. This is the main interface users will interact with.

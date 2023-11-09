@@ -1,66 +1,83 @@
 TESTS DOCUMENTED BY NUMBER
 
-Instead of writing a bunch of tests for the existing features, instead write tests
-for features that will be written, then turn the tests on when the feature exists.
-(Also write tests for existing features too!)
-
 IceBrakes and pylint have some overlap and you may see pylint disabled for entire
 tests because it pops way too many errors. I'll try to make sure white space issues
 are addressed before disabling pylint.
 
+A test with zero asterisks next to it's number is fully written and the feature is implemented and the
+test passes. Any more asterisks implies the test is a work in progress. Here is a key.
 
-*   the test is written but the feature is not written.
+*   The test is written but the feature is not written.
 
-**  neither the test nor the feature are written. This is like fantasy football for tests.
+**  Neither the test nor the feature are written.
 
-*** the test file is being used to develop a complex feature and the final test will be more elaborate.
+*** The test file is being used to develop a complex feature and the final test will be more elaborate.
 
-**** feature is written and test is not
+**** Feature is written and test is not (ideally this wouldn't happen).
 
-#### LINTING TESTS ####
+
+LINTING TESTS
 
 0000
 This test passes the lint, and gives exit code 0.
+
 0001
 Changing an immutable variable inside if __name__ == __main__ block
+
 0002
 Mutating a variable on a line earlier than the line it's declared immutable on.
+
 0003
 No linting is declared in this test. Exit code 2
+
 0004
 #$ is used at the end of a line but not vars are declared on that line. Exit code 3.
+
 0005
 Declaring an immutable var inside a loop. This should be illegal.
+
 0006
 Define an immutable function inside while loop. 
+
 0007 *
 You can't assign a shallow copy of an immutable var because in python that 
 can mutate the original. This will be a huge mutability safety net.
+
 0008 *
 On that note you also shouldn't be allowed to change the individual values in an immutable list
 or dict. Of course in python only tuples have that behavior but we are adding it in manually.
+
 0009 ***
 RELEGATED. Upon reflection this test achieved nothing and will be removed from the repo.
 The number 0009 will go to the next test that I write. 
+
 0010 *
 Classes baby! This test checks for changes to immutable class vars in class methods, and
 properties. Test 10 comes with a significant amount of complexity and solves a problem that
 frozen dataclasses already solve. So this might be vaporware.
+
 0011
 Added support for +=, -=, //= etc operators.
+
 0012 *
 Still need support for := operator because it is usually prefaced by something like 'if'. There
 is a good chance this feature will not be supported by IceBrakes.
+
 0013
 Checks that IceBrakes ignores comments (# only)
+
 0014
 First scope test.
+
 0015
 More in depth scope test.
+
 0016
 Test string skipping
+
 0017
 Test parenthesis skipping
+
 0018
 Multiline Comment Parser test.
 
@@ -80,20 +97,22 @@ This test is a bit weird because it requires an invalid name so it actually trie
 test_####.py which doesn't exist.  This test was rewritten in v0.1.5 and it now demonstrates
 how some of the globals in tools.py can be used to build your own test from scratch.
 
-1003
-This should lint the entire testing dir to one massive file, I'm not going to manually
-check the accuracy of this test but the point is mostly just that the output shouldn't
-be changed by new code.
 
-
-#### BUG FIX TESTS ####
+BUG FIX TESTS
 See docs/bug_tracker.txt for full documentation of bugs and their tests.
 2000
 
 
-#### FINAL TEST ####
+CLEANUP
 9999_cleanup
 Cleans up the src/tests/data/tmp dir.
+
+
+RELEGATED
+1003
+This should lint the entire testing dir to one massive file, I'm not going to manually
+check the accuracy of this test but the point is mostly just that the output shouldn't
+be changed by new code.
 
 
 Copyright © 2023 Lars S.

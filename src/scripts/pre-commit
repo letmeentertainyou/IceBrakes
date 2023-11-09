@@ -1,6 +1,0 @@
-#!/bin/bash
-# This hook makes sure unifier passses with an exit code of 0
-./unifier.sh
-
-# Bash is awesome, and the exit code of this single line script will
-# Be the same exit code as the unifier.sh script

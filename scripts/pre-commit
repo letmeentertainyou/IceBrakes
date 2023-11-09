@@ -4,7 +4,7 @@
 # extra files aren't pushed to the repo. 
 
 echo 'forcing cleanup test on'
-src/scripts/cleanup_toggle.py -en
+scripts/cleanup_toggle.py -en
 
 # Now this script captures the exit codes so that I can run a commit hook
 # That only allows commits when unifier exits 0
@@ -44,33 +44,6 @@ done
 
 echo pass
 exit 0
-
-
-
-
-
-
-
-# THIS PROJECT CURRENTLY HAS NO CUSTOM TYPES OR CLASES
-# SO NO STUBS REQUIRED, IF STUBS ARE NEEDED ADD THESE LINES 
-# TO THE TOP AND MAKE stubs/src & relegated/stubs/src DIRS
-
-
-# stub gen doesn't check for relegated stubs
-# so I back up the stubs and delete the originals
-#echo 'backing up old stubs'
-#cp -a stubs/src/. relegated/stubs/src
-#sleep 0.4
-
-#echo 'deleting old stubs'
-#rm stubs/src/*
-#sleep 0.4
-
-#echo 'stubgen'
-# This command is faster, if the stubs suck use the commented command
-#stubgen --include-private --parse-only src -o stubs
-#stubgen --include-private src -o stubs
-#echo '#################################################'
 
 
 #Copyright © 2023 Lars S.

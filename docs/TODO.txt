@@ -2,6 +2,8 @@
 Development on IceBrakes has paused with version 0.2.0
 ######################################################
 
+NOTE: Add Black rule to ignore src/tests entirely before editing a single file in that dir,
+
 # MISSING FEATURES
 
     * Lines that end in '\' awareness
@@ -10,9 +12,14 @@ Development on IceBrakes has paused with version 0.2.0
         of my algorithm, I'm not really sure how to approach it. I suppose another boolean in
         States() to track if we are on a multiline is a good start.
 
-        I can't decide if this feature will be simple/complex or if it's even that relevant to
-        assignment so this feature is pretty low on my list. I rarely if ever use the line split
-        operator.
+
+    * Shallow Copy Prevention
+        
+        I don't think this will be too tricky but it's gonna have a lot of processing overhead
+        because before I only cared about name assignments that matched the constants dict and
+        after this change I will need to track the values assigned to all names in the file to
+        make sure none of the constants are shallow copied to another name. So we might gain an
+        an order of magnitude in time.
 
 
     * Multiline Assignment (weird whitespace hack)
@@ -48,22 +55,13 @@ Development on IceBrakes has paused with version 0.2.0
 
     * Square Brace Checker
 
-        There are a few times when square braces can be used to assign a value and we need a
+        There are a few times when square braces can be used to assign a value and I need a
         method of linting for those. For example if bar is immutable then 
             
             bar[x] = None
 
-        is illegal. So let's check for that type of assignment. This is going to cost a lot of 
+        Would be illegal. So let's check for that type of assignment. This is going to cost a lot of 
         performance but it's fundamental to the shallow copy problem below.
-
-
-    * Shallow Copy Prevention
-        
-        I don't think this will be too tricky but it's gonna have a lot of processing overhead
-        because before I only cared about name assignments that matched the constants dict and
-        after this change I will need to track the values assigned to all names in the file to
-        make sure none of the constants are shallow copied to another name. So we might gain an
-        an order of magnitude in time.
 
 
 # CHANGELOG
@@ -89,6 +87,7 @@ Added basic string parsing and enabled tests 16 and 17, BUGFIX 2001.
 Added a multiline comment parsing engine, and test 18.
 Relegated tests 7, 8, 10 and 12 for now. 
 Entered development pause on v0.2.0
-
+Cleaned up every doc, fixed many typos, move the src/scripts/ to scripts/ because that dir has nothing todo
+with the source code. Added the Black formatter to icebrakes.py.
 
 Copyright © 2023 Lars S.

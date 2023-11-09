@@ -1,4 +1,3 @@
-This file exists to document commands that have helped in this project.
 This file is not intended to be executed which is why command lines start with $
 
 Some of these commands were not possible without a hard path so you can change 
@@ -20,12 +19,12 @@ Convert all sym links to hard links (stolen from superuser)
 $ find -type l -exec bash -c 'ln -f "$(readlink -m "$0")" "$0"' {} \;
 
 
-### TESTING ###
+### TESTING FAILURE DIAGNOSTIC ###
 
-Toggle the cleanup test off/only (useful for debugging test fails)
-$ alias cleanup_toggle='~/Python/Projects/IceBrakes/src/scripts/cleanup_toggle.py'
+Toggle the cleanup test off/on.
+$ alias cleanup_toggle='~/Python/Projects/IceBrakes/scripts/cleanup_toggle.py'
 
-Diff expected test output from the generated output
+Diff the expected test output from the generated output. 
 testdiff(){
     perm=~/Python/Projects/IceBrakes/src/tests/data/perm/test_$1.txt
     tmp=~/Python/Projects/IceBrakes/src/tests/data/tmp/test_$1.txt
@@ -34,17 +33,17 @@ testdiff(){
 
 ### GIT ###
 
-List all files in git repo
+List all files in git repo.
 $ alias gtree='git ls-tree --full-tree --name-only -r HEAD'
 
-Undo last commit
+Undo last commit.
 $ alias greset='git reset --soft HEAD~1'
 
-Add all files and commit
+Add all files and commit.
 $ alias g='git add --all && git commit -m $1'
 
-Run unifier.sh script in project root from any dir.
-$ alias uni='cd ~/Python/Projects/IceBrakes/ && ./unifier.sh && cd -'
+Run pre-commit script in project root from any dir.
+$ alias pre='cd ~/Python/Projects/IceBrakes/ && ./scripts/pre-commit && cd -'
 
 
 ### BENCHMARKS ###
